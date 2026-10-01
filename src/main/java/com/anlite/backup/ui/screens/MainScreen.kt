@@ -91,6 +91,7 @@ fun MainScreen(
     val selectedDirectoryForSheet by directoriesViewModel.selectedDirectory.collectAsState()
     val pathValidation by directoriesViewModel.pathValidation.collectAsState()
     val isValidatingPath by directoriesViewModel.isValidatingPath.collectAsState()
+    val isDirectoriesSyncing by directoriesViewModel.isSyncing.collectAsState()
     var showAddDirectoryDialog by remember { mutableStateOf(false) }
     var showBatchRestoreDialog by remember { mutableStateOf(false) }
 
@@ -182,6 +183,14 @@ fun MainScreen(
                     1 -> {
                         DirectoriesPage(
                             directories = directories,
+                            isSyncing = isDirectoriesSyncing,
+                            onSync = {
+                                directoriesViewModel.syncDirectories { success ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(if (success) "目录快照同步完成" else "目录快照同步失败")
+                                    }
+                                }
+                            },
                             onDirectoryClick = { directoriesViewModel.selectDirectory(it) },
                             onBackupSingle = { directoriesViewModel.backupDirectory(it) },
                             onBackupAll = { directoriesViewModel.backupAllDirectories() },

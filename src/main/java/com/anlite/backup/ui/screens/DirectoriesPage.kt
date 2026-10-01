@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anlite.backup.data.dbs.entity.BackupDirectory
 import com.anlite.backup.ui.compose.icons.Phosphor
+import com.anlite.backup.ui.compose.icons.phosphor.ArrowsClockwise
 import com.anlite.backup.ui.compose.icons.phosphor.Clock
 import com.anlite.backup.ui.compose.icons.phosphor.FloppyDisk
 import com.anlite.backup.ui.compose.icons.phosphor.FolderNotch
@@ -61,6 +63,8 @@ private fun formatTime(time: LocalDateTime?): String {
 @Composable
 fun DirectoriesPage(
     directories: List<BackupDirectory>,
+    isSyncing: Boolean = false,
+    onSync: () -> Unit = {},
     onDirectoryClick: (BackupDirectory) -> Unit,
     onBackupSingle: (BackupDirectory) -> Unit,
     onBackupAll: () -> Unit,
@@ -105,13 +109,28 @@ fun DirectoriesPage(
                     lineHeight = 18.sp,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    onClick = onAddClick,
-                    shape = RoundedCornerShape(12.dp),
-                ) {
-                    Icon(Phosphor.PlusCircle, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("添加首个目录")
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(
+                        onClick = onAddClick,
+                        shape = RoundedCornerShape(12.dp),
+                    ) {
+                        Icon(Phosphor.PlusCircle, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("添加目录")
+                    }
+                    OutlinedButton(
+                        onClick = onSync,
+                        enabled = !isSyncing,
+                        shape = RoundedCornerShape(12.dp),
+                    ) {
+                        if (isSyncing) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                        } else {
+                            Icon(Phosphor.ArrowsClockwise, contentDescription = null, modifier = Modifier.size(18.dp))
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(if (isSyncing) "正在同步..." else "从仓库同步")
+                    }
                 }
             }
         } else {
@@ -129,14 +148,29 @@ fun DirectoriesPage(
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    OutlinedButton(
-                        onClick = onBackupAll,
-                        shape = RoundedCornerShape(8.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Icon(Phosphor.FloppyDisk, contentDescription = null, modifier = Modifier.size(14.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("备份全部", fontSize = 12.sp)
+                        IconButton(
+                            onClick = onSync,
+                            enabled = !isSyncing,
+                        ) {
+                            if (isSyncing) {
+                                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                            } else {
+                                Icon(Phosphor.ArrowsClockwise, contentDescription = "同步目录快照", modifier = Modifier.size(18.dp))
+                            }
+                        }
+                        OutlinedButton(
+                            onClick = onBackupAll,
+                            shape = RoundedCornerShape(8.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                        ) {
+                            Icon(Phosphor.FloppyDisk, contentDescription = null, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("备份全部", fontSize = 12.sp)
+                        }
                     }
                 }
 

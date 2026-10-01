@@ -58,11 +58,18 @@ class DirectoryRepository(
 
     suspend fun getById(id: Long): BackupDirectory? = directoryDao.getById(id)
 
-    suspend fun getByPath(path: String): BackupDirectory? = directoryDao.getByPath(normalizePath(path))
+    suspend fun getByPath(path: String): BackupDirectory? {
+        val norm = normalizePath(path)
+        val direct = directoryDao.getByPath(norm)
+        if (direct != null) return direct
+        val canonical = canonicalizeStoragePath(norm)
+        val all = directoryDao.getAll()
+        return all.firstOrNull { isSamePath(it.path, norm) || isSamePath(it.path, canonical) }
+    }
 
     suspend fun saveDirectory(name: String, rawPath: String): Long {
         val path = normalizePath(rawPath)
-        val existing = directoryDao.getByPath(path)
+        val existing = getByPath(path)
         return if (existing != null) {
             directoryDao.update(existing.copy(name = name))
             existing.id
@@ -143,5 +150,28 @@ class DirectoryRepository(
             p = p.substring(0, p.length - 1)
         }
         return p
+    }
+
+    fun canonicalizeStoragePath(path: String): String {
+        val p = normalizePath(path)
+        val aliases = listOf("/sdcard", "/mnt/sdcard", "/storage/self/primary")
+        for (alias in aliases) {
+            if (p == alias) {
+                return "/storage/emulated/0"
+            }
+            if (p.startsWith("$alias/")) {
+                return "/storage/emulated/0" + p.removePrefix(alias)
+            }
+        }
+        return p
+    }
+
+    fun isSamePath(path1: String, path2: String): Boolean {
+        val p1 = normalizePath(path1)
+        val p2 = normalizePath(path2)
+        if (p1 == p2) return true
+        val c1 = canonicalizeStoragePath(p1)
+        val c2 = canonicalizeStoragePath(p2)
+        return c1 == c2
     }
 }

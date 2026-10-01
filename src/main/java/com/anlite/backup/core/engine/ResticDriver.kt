@@ -11,6 +11,22 @@ import timber.log.Timber
 import java.io.File
 
 @Serializable
+data class ResticSummary(
+    val files_new: Long = 0,
+    val files_changed: Long = 0,
+    val files_unmodified: Long = 0,
+    val dirs_new: Long = 0,
+    val dirs_changed: Long = 0,
+    val dirs_unmodified: Long = 0,
+    val data_blobs: Long = 0,
+    val tree_blobs: Long = 0,
+    val data_added: Long = 0,
+    val data_added_packed: Long = 0,
+    val total_files_processed: Long = 0,
+    val total_bytes_processed: Long = 0,
+)
+
+@Serializable
 data class ResticSnapshot(
     val id: String,
     val short_id: String? = null,
@@ -19,6 +35,7 @@ data class ResticSnapshot(
     val tags: List<String> = emptyList(),
     val hostname: String? = null,
     val username: String? = null,
+    val summary: ResticSummary? = null,
 )
 
 @Serializable
@@ -74,6 +91,8 @@ class ResticDriver(private val context: Context) {
             "RESTIC_REPOSITORY" to repoPath,
             "RESTIC_PASSWORD" to password,
             "RESTIC_CACHE_DIR" to cacheDir.absolutePath,
+            "XDG_CACHE_HOME" to cacheDir.absolutePath,
+            "HOME" to "/data/local/tmp",
             "TMPDIR" to "/data/local/tmp",
         )
     }
@@ -335,8 +354,13 @@ class ResticDriver(private val context: Context) {
         if (output.isEmpty() || output == "null") {
             return@withContext emptyList()
         }
+        val jsonContent = if (output.contains("[") && output.contains("]")) {
+            output.substring(output.indexOf("["), output.lastIndexOf("]") + 1)
+        } else {
+            output
+        }
         try {
-            json.decodeFromString<List<ResticSnapshot>>(output)
+            json.decodeFromString<List<ResticSnapshot>>(jsonContent)
         } catch (e: Throwable) {
             Timber.e(e, "Error parsing restic snapshots JSON: $output")
             emptyList()
@@ -355,8 +379,13 @@ class ResticDriver(private val context: Context) {
             return@withContext null
         }
         val output = result.out.joinToString("\n").trim()
+        val jsonContent = if (output.contains("{") && output.contains("}")) {
+            output.substring(output.indexOf("{"), output.lastIndexOf("}") + 1)
+        } else {
+            output
+        }
         try {
-            json.decodeFromString<ResticStats>(output)
+            json.decodeFromString<ResticStats>(jsonContent)
         } catch (e: Throwable) {
             Timber.e(e, "Error parsing restic stats JSON: $output")
             null

@@ -9,6 +9,7 @@ import com.anlite.backup.core.queue.QueueProgress
 import com.anlite.backup.core.queue.SequentialBackupQueue
 import com.anlite.backup.core.usecase.DeleteSnapshotUseCase
 import com.anlite.backup.core.usecase.RestoreDirectoryUseCase
+import com.anlite.backup.core.usecase.SyncRepositoryUseCase
 import com.anlite.backup.data.dbs.entity.BackupDirectory
 import com.anlite.backup.data.preferences.EnginePreferences
 import com.anlite.backup.data.repository.DirectoryRepository
@@ -38,6 +39,7 @@ class DirectoriesViewModel(
     private val backupQueue: SequentialBackupQueue,
     private val restoreDirectoryUseCase: RestoreDirectoryUseCase,
     private val deleteSnapshotUseCase: DeleteSnapshotUseCase,
+    private val syncRepositoryUseCase: SyncRepositoryUseCase,
     private val preferences: EnginePreferences,
     private val resticDriver: ResticDriver,
 ) : ViewModel() {
@@ -48,6 +50,31 @@ class DirectoriesViewModel(
     val queueProgress: StateFlow<QueueProgress> = backupQueue.progress
 
     val presets: List<PresetDirectory> get() = directoryRepository.presets
+
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
+
+    init {
+        syncDirectories()
+    }
+
+    fun syncDirectories(onComplete: ((Boolean) -> Unit)? = null) {
+        viewModelScope.launch {
+            _isSyncing.value = true
+            android.util.Log.i("AnLiteBackupSync", "DirectoriesViewModel: syncDirectories started")
+            try {
+                val res = syncRepositoryUseCase.execute()
+                android.util.Log.i("AnLiteBackupSync", "DirectoriesViewModel: syncDirectories finished isSuccess=${res.isSuccess}")
+                onComplete?.invoke(res.isSuccess)
+            } catch (e: Throwable) {
+                android.util.Log.e("AnLiteBackupSync", "DirectoriesViewModel: syncDirectories caught exception", e)
+                Timber.e(e, "Failed to sync directory snapshots")
+                onComplete?.invoke(false)
+            } finally {
+                _isSyncing.value = false
+            }
+        }
+    }
 
     private val _selectedDirectory = MutableStateFlow<DirectoryDetailUiState?>(null)
     val selectedDirectory: StateFlow<DirectoryDetailUiState?> = _selectedDirectory.asStateFlow()
@@ -129,8 +156,14 @@ class DirectoriesViewModel(
         viewModelScope.launch {
             try {
                 val config = preferences.getSnapshotConfig()
-                val snaps = resticDriver.listSnapshots(config.repoPath, config.repoPassword, tag = directory.path)
-                    .sortedByDescending { it.time }
+                val allSnaps = resticDriver.listSnapshots(config.repoPath, config.repoPassword)
+                val snaps = allSnaps.filter { snap ->
+                    (snap.tags.contains("dir") || snap.tags.any { it.startsWith("dir:") }) && (
+                        snap.tags.any { directoryRepository.isSamePath(it, directory.path) } ||
+                        snap.paths.any { directoryRepository.isSamePath(it, directory.path) }
+                    )
+                }.sortedByDescending { it.time }
+
                 _selectedDirectory.update {
                     if (it?.directory?.id == directory.id) {
                         it.copy(snapshots = snaps, isLoadingSnapshots = false)
