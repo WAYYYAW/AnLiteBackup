@@ -97,7 +97,7 @@
     <string name="prefs_excludecache_summary">数据备份时排除应用程序的缓存</string>
     <string name="prefs_acquirewakelock_summary">在批处理操作期间获取一个唤醒锁以防止睡眠。这将大大加快备份和还原的速度，但会消耗更多电量。</string>
     <string name="prefs_oldbackups_summary">指定多少天后已备份的数据属于“旧备份”。用于筛选。</string>
-    <string name="prefs_copyselfapk_summary">将 Neo Backup 的一份副本放在备份文件夹内</string>
+    <string name="prefs_copyselfapk_summary">将 AnLite Backup 的一份副本放在备份文件夹内</string>
     <string name="prefs_rememberfiltering_summary">记住所选择的排序和过滤方法。只有那些在菜单中用复选框标记的才会被记住。</string>
     <string name="prefs_batchdelete_summary">删除已有的未安装应用的备份。</string>
     <string name="sched_title">计划</string>
@@ -163,7 +163,7 @@
     <string name="intro_permission_batteryoptimization">定时备份任务可能会遇到一些问题，它是由一些采用激进电池优化的 ROM(例如 MIUI) 导致的。当然即使在 vanilla AOSP 上也有可能出现这种问题。</string>
     <string name="intro_permission_usageaccess">该应用需要此权限才能获得统计信息，从而获得应用的缓存及数据大小。</string>
     <string name="intro_permission_storage">本应用程序使用存储的读/写权限来访问外部存储，从而获得备份其他应用的外部数据的权限。</string>
-    <string name="intro_welcome_message">Neo Backup（原名OAndBackupX）是著名的备份程序OAndBackup的fork分叉，其目的是使OAndBackup能在202X年使用，并成为Neo应用套件的一部分。目前，该应用程序已经完全重写，接下来将会使它变得更强大，并添加一些已长期计划的功能。它可以适用于任何设备的备份/还原数据。
+    <string name="intro_welcome_message">AnLite Backup（原名OAndBackupX）是著名的备份程序OAndBackup的fork分叉，其目的是使OAndBackup能在202X年使用，并成为Neo应用套件的一部分。目前，该应用程序已经完全重写，接下来将会使它变得更强大，并添加一些已长期计划的功能。它可以适用于任何设备的备份/还原数据。
 \n因此，我们随时欢迎所有类型的对本项目的贡献。
 \n
 \n现在谈谈我们的应用程序的功能：
@@ -171,7 +171,7 @@
 \n• 支持单个程序的备份和还原，也支持批量备份和还原。
 \n• 可以实时还原系统程序，而不需要重新启动系统。
 \n• 备份可以定时执行，对计划任务的数量没有限制，并且可以从已安装应用程序列表中选定并创建所需的自定义备份列表。</string>
-    <string name="welcome_to_oabx">欢迎使用 Neo Backup！</string>
+    <string name="welcome_to_oabx">欢迎使用 AnLite Backup！</string>
     <string name="storage_access">访问存储空间</string>
     <string name="enable_encryption_message">在设备上不加密保存你的数据是很不安全的。为了你的数据的安全，请启用加密并设置一个密码。</string>
     <string name="enable_encryption_title">数据加密</string>
@@ -322,7 +322,7 @@
     <string name="sortDesc">降序</string>
     <string name="prefs_restorepermissions">恢复应用权限</string>
     <string name="prefs_loadingtoasts">显示加载时的toasts消息</string>
-    <string name="prefs_restorepermissions_summary">还原应用已拥有的权限。请注意，有些特殊权限无法以通常方式授予，它会导致应用还原失败。这时，Neo Backup就会在不授予权限的情况下还原此应用。</string>
+    <string name="prefs_restorepermissions_summary">还原应用已拥有的权限。请注意，有些特殊权限无法以通常方式授予，它会导致应用还原失败。这时，AnLite Backup就会在不授予权限的情况下还原此应用。</string>
     <string name="prefs_loadingtoasts_summary">在加载应用列表时显示toasts消息</string>
     <string name="supended_apps_cleanup">清理已挂起的应用</string>
     <string name="root_missing">未获得root权限！</string>

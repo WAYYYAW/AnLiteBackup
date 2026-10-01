@@ -4,12 +4,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
 import androidx.test.platform.app.InstrumentationRegistry
-import com.machiav3lli.backup.NeoApp
-import com.machiav3lli.backup.data.dbs.entity.Backup
-import com.machiav3lli.backup.data.entity.RootFile
-import com.machiav3lli.backup.data.entity.StorageFile
-import com.machiav3lli.backup.data.entity.getCursorString
-import com.machiav3lli.backup.manager.handler.LogsHandler
+import com.anlite.backup.AnLiteApp
+import com.anlite.backup.data.dbs.entity.Backup
+import com.anlite.backup.data.entity.RootFile
+import com.anlite.backup.data.entity.StorageFile
+import com.anlite.backup.data.entity.getCursorString
+import com.anlite.backup.manager.handler.LogsHandler
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.junit.Test
@@ -73,7 +73,7 @@ class Try_readProperties {
     fun test_scanPropertiesSAF() {
         val backups = mutableMapOf<String, MutableList<Backup>>()
         val time = measureTimeMillis {
-            val backupRoot = NeoApp.backupRoot
+            val backupRoot = AnLiteApp.backupRoot
             backupRoot?.listFiles()?.forEach { packageDir ->
                 val packageName = packageDir.name
                 val backupList = mutableListOf<Backup>()
@@ -99,12 +99,12 @@ class Try_readProperties {
         val backups = mutableMapOf<String, MutableList<Backup>>()
         val backupList = mutableListOf<Backup>()
         val time = measureTimeMillis {
-            val backupRoot = NeoApp.backupRoot
+            val backupRoot = AnLiteApp.backupRoot
             val treeUri = DocumentsContract
                 .buildDocumentUriUsingTree(backupRoot!!.uri, DocumentsContract.getTreeDocumentId(backupRoot.uri))
 
             val authority = treeUri.authority
-                            //"com.machiav3lli.backup.provider"
+                            //"com.anlite.backup.provider"
                             //"androidx.core.content.FileProvider"
                             //"com.android.externalstorage.documents" // this is the value baund to the treeUri
             val searchUri = DocumentsContract
@@ -114,7 +114,7 @@ class Try_readProperties {
                     ".properties"
                 )
 
-            val cursor = NeoApp.context.contentResolver
+            val cursor = AnLiteApp.context.contentResolver
                 .query(searchUri, null, Bundle.EMPTY, null)
 
             var documentUri: Uri
@@ -170,7 +170,7 @@ class Try_readProperties {
                     packageName?.let { backups.put(it, backupList) }
             }
         }
-        val serialized = NeoApp.propsSerializer.encodeToString(backups)
+        val serialized = AnLiteApp.propsSerializer.encodeToString(backups)
         //StorageFile(File("/sdcard/test.map")).outputStream()?.write(serialized.toByteArray())
         //Timber.i("backups: $serialized")
         Timber.i("packages: ${backups.size} backups: ${backups.map { it.value.size }.sum()}")
@@ -207,7 +207,7 @@ class Try_readProperties {
             Timber.i("file ${file.path} size: $size")
             val text = file.readText()
             Timber.i("text size: ${text.length}")
-            backups = NeoApp.propsSerializer.decodeFromString(text)
+            backups = AnLiteApp.propsSerializer.decodeFromString(text)
         }
         Timber.i("packages: ${backups.size} backups: ${backups.map { it.value.size }.sum()}")
         Timber.w("time backups from single map file: $time ms")

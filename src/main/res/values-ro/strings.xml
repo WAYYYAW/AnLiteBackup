@@ -155,7 +155,7 @@
     <string name="grant_smsmms_message">Acest lucru este esențial pentru a putea face backup/restaura SMS-urile/MMS-urile.</string>
     <string name="grant_calllogs_message">Acest lucru este esențial pentru a putea face backup/restaura jurnalele de apeluri.</string>
     <string name="app_size">Dimensiunea aplicației:</string>
-    <string name="welcome_to_oabx">Bun venit la Neo Backup!</string>
+    <string name="welcome_to_oabx">Bun venit la AnLite Backup!</string>
     <string name="grant_usage_access_message">Acest lucru este esențial pentru a obține informații despre dimensiunile fișierelor aplicațiilor</string>
     <string name="intro_permission_batteryoptimization">Aplicația se poate confrunta cu unele probleme la efectuarea backupurilor planificate pe unele ROM-uri care adoptă o optimizare agresivă a bateriei, de ex. MIUI, dar chiar și pe AOSP vanilla se poate întâmpla o astfel de problemă.</string>
     <string name="grant_usage_access_title">Acordă acces la datele de utilizare</string>
@@ -234,7 +234,7 @@
     <string name="main">Start</string>
     <string name="sortAsc">Ascendent</string>
     <string name="sortDesc">Descendent</string>
-    <string name="intro_welcome_message">Neo Backup (fostul OAndBackupX) este un fork al OAndBackup cu scopul de a aduce OAndBackup în 202X și este parte din suita Neo Applications. Deocamdată, aplicația este deja rescrisă complet, urmând să o facem robustă și să adăugăm câteva caracteristici planificate îndelung care ar putea ușura fluxul de lucru de creare de backupuri/restaurare cu orice dispozitiv.
+    <string name="intro_welcome_message">AnLite Backup (fostul OAndBackupX) este un fork al OAndBackup cu scopul de a aduce OAndBackup în 202X și este parte din suita Neo Applications. Deocamdată, aplicația este deja rescrisă complet, urmând să o facem robustă și să adăugăm câteva caracteristici planificate îndelung care ar putea ușura fluxul de lucru de creare de backupuri/restaurare cu orice dispozitiv.
 \n Prin urmare, toate tipurile de contribuții sunt întotdeauna binevenite.
 \n
 \n Acum cu privire la funcționalitățile aplicației noastre:
@@ -252,7 +252,7 @@
     <string name="prefs_biometriclock_summary">Securizează aplicația cu ajutorul blocării biometrice a dispozitivului (de ex., amprentă digitală, deblocare facială)</string>
     <string name="prefs_biometriclock">Blocare biometrică</string>
     <string name="dialog_unlock">Deblochează</string>
-    <string name="prefs_restorepermissions_summary">Restaurează permisiunile care au fost acordate aplicației la momentul backupului. Reține că unele permisiuni nu pot fi acordate în mod programatic și, prin urmare, fac ca restaurarea pachetului să eșueze în ansamblu, lucru pe care Neo Backup îl acoperă apoi restaurând pachetul fără permisiuni.</string>
+    <string name="prefs_restorepermissions_summary">Restaurează permisiunile care au fost acordate aplicației la momentul backupului. Reține că unele permisiuni nu pot fi acordate în mod programatic și, prin urmare, fac ca restaurarea pachetului să eșueze în ansamblu, lucru pe care AnLite Backup îl acoperă apoi restaurând pachetul fără permisiuni.</string>
     <string name="prefs_acquirewakelock">Împiedică modul sleep</string>
     <string name="sortAppSize">Dimensiunea aplicațiilor</string>
     <string name="sortBackupSize">Dimensiunea backupurilor</string>

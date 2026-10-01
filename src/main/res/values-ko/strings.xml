@@ -86,7 +86,7 @@
     <string name="prefs_mediadata">미디어 파일 백업</string>
     <string name="prefs_sessionIinstaller">세션 인스톨러 사용</string>
     <string name="prefs_installerpackagename">인스톨러 패키지 이름:</string>
-    <string name="prefs_restorepermissions_summary">백업 시 앱에 부여한 권한을 복원합니다. 일부 권한은 자동으로 부여할 수 없으므로 패키지 복원이 전체적으로 실패할 수 있으며, Neo Backup은 권한을 제외한 패키지를 복원합니다.</string>
+    <string name="prefs_restorepermissions_summary">백업 시 앱에 부여한 권한을 복원합니다. 일부 권한은 자동으로 부여할 수 없으므로 패키지 복원이 전체적으로 실패할 수 있으며, AnLite Backup은 권한을 제외한 패키지를 복원합니다.</string>
     <string name="prefs_deviceprotecteddata">디바이스 보호 데이터 백업</string>
     <string name="prefs_numBackupRevisions">백업 리비전 개수</string>
     <string name="prefs_numBackupRevisions_summary">새 백업 생성 시 설정된 개수를 초과하면 가장 오래된 리비전이 지워집니다. 모든 리비전을 유지하려면 0으로 설정합니다.</string>
@@ -161,7 +161,7 @@
     <string name="help_appTypeHint">* 앱이 제거된 경우 \'앱 유형\'의 아이콘은 회색이고, 앱이 비활성화된 경우 짙은 회색입니다.</string>
     <string name="enable_encryption_title">데이터 암호화</string>
     <string name="storage_access">저장소 액세스</string>
-    <string name="welcome_to_oabx">Neo Backup에 오신 것을 환영합니다!</string>
+    <string name="welcome_to_oabx">AnLite Backup에 오신 것을 환영합니다!</string>
     <string name="radio_launchable">실행 가능한 앱</string>
     <string name="stats_updated">업데이트됨</string>
     <string name="stats_backups">백업</string>
@@ -257,7 +257,7 @@
     <string name="prefs_obbdata">obb 파일 백업</string>
     <string name="prefs_sessionIinstaller_summary">기본 인스톨러 대신 세션 인스톨러를 사용합니다. 더 느리지만 Android 13+ 에서 발생하는 문제를 방지합니다</string>
     <string name="prefs_restorepermissions">권한 복원</string>
-    <string name="prefs_copyselfapk_summary">백업 폴더의 최상위에 Neo Backup의 복사본을 둡니다</string>
+    <string name="prefs_copyselfapk_summary">백업 폴더의 최상위에 AnLite Backup의 복사본을 둡니다</string>
     <string name="sched_mode">백업 모드:</string>
     <string name="spec_wallpaper">배경화면</string>
     <string name="spec_fingerprint">지문</string>
@@ -291,7 +291,7 @@
     <string name="smsmms_permission_title">SMS/MMS 권한</string>
     <string name="help_faq">자주 묻는 질문</string>
     <string name="intro_permission_calllogs">앱에서 통화 기록을 백업/복원하려면 이 권한이 필요합니다.</string>
-    <string name="intro_welcome_message">Neo Backup (구 OAndBackupX)은 유명한 OAndBackup을 202X 및 Neo Applications 제품군의 일부로 가져오는 것을 목표로 하는 포크입니다. 현재는 앱이 이미 완전히 재작성되어 있어 강력하게 만들고 모든 디바이스에서 백업/복원 워크플로우를 용이하게 할 수 있도록 오랫동안 계획된 기능을 추가할 예정입니다.
+    <string name="intro_welcome_message">AnLite Backup (구 OAndBackupX)은 유명한 OAndBackup을 202X 및 Neo Applications 제품군의 일부로 가져오는 것을 목표로 하는 포크입니다. 현재는 앱이 이미 완전히 재작성되어 있어 강력하게 만들고 모든 디바이스에서 백업/복원 워크플로우를 용이하게 할 수 있도록 오랫동안 계획된 기능을 추가할 예정입니다.
 \n기여는 항상 환영합니다.
 \n
 \n 현재 앱 기능:

@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.machiav3lli.backup.ui.activities.NeoActivity
-import com.machiav3lli.backup.ui.compose.isAtBottom
-import com.machiav3lli.backup.ui.pages.TerminalText
+import com.anlite.backup.ui.activities.AnLiteActivity
+import com.anlite.backup.ui.compose.isAtBottom
+import com.anlite.backup.ui.pages.TerminalText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -62,7 +62,7 @@ val init = run {
 class Test_UI_FollowNonStateVariable {
 
     @get:Rule
-    val test = createAndroidComposeRule<NeoActivity>()
+    val test = createAndroidComposeRule<AnLiteActivity>()
 
     @Before
     fun setUp() {

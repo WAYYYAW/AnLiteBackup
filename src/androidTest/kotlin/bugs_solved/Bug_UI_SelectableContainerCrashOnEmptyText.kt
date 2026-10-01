@@ -16,7 +16,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.machiav3lli.backup.utils.SystemUtils
+import com.anlite.backup.utils.SystemUtils
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

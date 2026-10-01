@@ -151,7 +151,7 @@
     <string name="prefs_sessionIinstaller_summary">Uporabi sejni namestitveni program namesto osnovnega. Je počasnejši, vendar preprečuje težave z Androidom 13+</string>
     <string name="prefs_installerpackagename">Ime namestitvenega paketa:</string>
     <string name="prefs_restorepermissions">Obnovi dovoljenja</string>
-    <string name="prefs_restorepermissions_summary">Obnovi dovoljenja, ki so bila dodeljena aplikaciji v trenutku varnostnega kopiranja. Upoštevaj, da nekaterih dovoljenj ni mogoče dodeliti programsko, kar povzroči, da obnovitev paketa v celoti ni uspešna, zato Neo Backup nato obnovi paket brez dovoljenj.</string>
+    <string name="prefs_restorepermissions_summary">Obnovi dovoljenja, ki so bila dodeljena aplikaciji v trenutku varnostnega kopiranja. Upoštevaj, da nekaterih dovoljenj ni mogoče dodeliti programsko, kar povzroči, da obnovitev paketa v celoti ni uspešna, zato AnLite Backup nato obnovi paket brez dovoljenj.</string>
     <string name="prefs_deviceprotecteddata">Varnostno kopiranje zavarovanih podatkov na napravi</string>
     <string name="prefs_deviceprotecteddata_summary">Varnostno kopira podatke, ki so shranjeni v mapi data/user_de</string>
     <string name="prefs_numBackupRevisions">Število različic varnostnih kopij</string>
@@ -173,7 +173,7 @@
     <string name="prefs_batchdelete">Izbrisati varnostne kopije?</string>
     <string name="prefs_batchdelete_summary">Izbriše varnostne kopije vseh aplikacij, ki trenutno niso nameščene.</string>
     <string name="prefs_copyselfapk">Kopirati lastni APK</string>
-    <string name="prefs_copyselfapk_summary">Kopijo Neo Backup-a shrani v najvišjo raven mape za varnostne kopije</string>
+    <string name="prefs_copyselfapk_summary">Kopijo AnLite Backup-a shrani v najvišjo raven mape za varnostne kopije</string>
     <string name="prefs_saveappslist">Shrani seznam aplikacij</string>
     <string name="prefs_saveappslist_summary">Zapiše seznam aplikacij v txt datoteko v uporabnikovi mapi za varnostne kopije</string>
     <string name="prefs_logviewer">Poglej dnevnik</string>
@@ -269,8 +269,8 @@
     <string name="enable_encryption_title">Šifriranje podatkov</string>
     <string name="enable_encryption_message">Ni varno, da podatke na napravi hraniš nešifrirane. Zaradi varnosti podatkov omogoči šifriranje in nastavi geslo.</string>
     <string name="storage_access">Dostop za shranjevanje</string>
-    <string name="welcome_to_oabx">Dobrodošel/la v Neo Backup!</string>
-    <string name="intro_welcome_message">Neo Backup (prej OAndBackupX) je različica znanega programa OAndBackup, katerega cilj je prenesti OAndBackup v leto 202X in ga vključiti v paket Neo Applications. Trenutno je aplikacija že v celoti na novo napisana, v prihodnosti pa jo bomo naredili bolj robustno in dodali nekaj že dolgo načrtovanih funkcij, ki bi olajšale delovni tok varnostnega kopiranja/obnavljanja na kateri koli napravi. \nZato so vsi prispevki vedno dobrodošli. \n \nZdaj pa o funkcionalnosti naše aplikacije:\n• Zahteva root in omogoča varnostno kopiranje posameznih aplikacij in njihovih podatkov.\n• Podprto je varnostno kopiranje in obnovitev programov posamično in varnostno kopiranje in obnovitev več programov hkrati.\n• Obnova sistemskih aplikacij naj bi bila mogoča brez potrebe po ponovnem zagonu.\n• Varnostno kopiranje je mogoče načrtovati brez omejitve števila posameznih razporedov, obstaja pa tudi možnost ustvarjanja prilagojenih seznamov iz seznama nameščenih aplikacij.</string>
+    <string name="welcome_to_oabx">Dobrodošel/la v AnLite Backup!</string>
+    <string name="intro_welcome_message">AnLite Backup (prej OAndBackupX) je različica znanega programa OAndBackup, katerega cilj je prenesti OAndBackup v leto 202X in ga vključiti v paket Neo Applications. Trenutno je aplikacija že v celoti na novo napisana, v prihodnosti pa jo bomo naredili bolj robustno in dodali nekaj že dolgo načrtovanih funkcij, ki bi olajšale delovni tok varnostnega kopiranja/obnavljanja na kateri koli napravi. \nZato so vsi prispevki vedno dobrodošli. \n \nZdaj pa o funkcionalnosti naše aplikacije:\n• Zahteva root in omogoča varnostno kopiranje posameznih aplikacij in njihovih podatkov.\n• Podprto je varnostno kopiranje in obnovitev programov posamično in varnostno kopiranje in obnovitev več programov hkrati.\n• Obnova sistemskih aplikacij naj bi bila mogoča brez potrebe po ponovnem zagonu.\n• Varnostno kopiranje je mogoče načrtovati brez omejitve števila posameznih razporedov, obstaja pa tudi možnost ustvarjanja prilagojenih seznamov iz seznama nameščenih aplikacij.</string>
     <string name="intro_permission_storage">Aplikacija uporablja dovoljenje za branje/pisanje v pomnilniku, da lahko dostopa do zunanjega pomnilnika in omogoča varnostno kopiranje zunanjih podatkov/obb drugih aplikacij.</string>
     <string name="intro_permission_storage_location">Aplikacija potrebuje mesto za shranjevanje varnostnih kopij. Aplikacija lahko za popolno varnostno kopijo potrebuje nekaj gigabajtov prostora in pogosto poizveduje v datotečnem sistemu. To upoštevaj pri izbiri omrežnega mesta za shranjevanje.</string>
     <string name="intro_permission_smsmms">Aplikacija potrebuje to dovoljenje, da lahko varnostno kopira/obnovi tvoja SMS/MMS sporočila.</string>

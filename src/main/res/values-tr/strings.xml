@@ -150,7 +150,7 @@
     <string name="prefs_sessionIinstaller_summary">Temel yükleyici yerine oturum yükleyiciyi kullanın. Daha yavaş ama Android 13+ ile ilgili sorunları önler</string>
     <string name="prefs_installerpackagename">Yükleyici paket adı:</string>
     <string name="prefs_restorepermissions">İzinleri geri yükle</string>
-    <string name="prefs_restorepermissions_summary">Yedekleme anında uygulamaya verilen izinleri geri yükler. Neo Backup bu hatayı karşılar ve paketi izinler olmadan geri yükler.</string>
+    <string name="prefs_restorepermissions_summary">Yedekleme anında uygulamaya verilen izinleri geri yükler. AnLite Backup bu hatayı karşılar ve paketi izinler olmadan geri yükler.</string>
     <string name="prefs_deviceprotecteddata">Cihaz korumalı verileri yedekle</string>
     <string name="prefs_deviceprotecteddata_summary">data/user_de dizininde yer alan verileri yedekler</string>
     <string name="prefs_numBackupRevisions">Yedekleme revizyon sayısı</string>
@@ -172,7 +172,7 @@
     <string name="prefs_batchdelete">Yedekleri sil\?</string>
     <string name="prefs_batchdelete_summary">Şu anda yüklü olmayan tüm uygulamaların yedeklerini sil.</string>
     <string name="prefs_copyselfapk">Kendi APK\'sını kopyala</string>
-    <string name="prefs_copyselfapk_summary">Neo Backup\'ın bir kopyasını yedekleme klasörünün en üst seviyesine yerleştir</string>
+    <string name="prefs_copyselfapk_summary">AnLite Backup\'ın bir kopyasını yedekleme klasörünün en üst seviyesine yerleştir</string>
     <string name="prefs_saveappslist">Uygulama listesini kaydet</string>
     <string name="prefs_saveappslist_summary">Kullanıcının yedekleme dizinine bir txt dosyasına uygulama listesi yazar</string>
     <string name="prefs_logviewer">Günlüğü görüntüle</string>
@@ -267,8 +267,8 @@
     <string name="enable_encryption_title">Veri Şifreleme</string>
     <string name="enable_encryption_message">Verilerinizi şifrelemeden cihazınızda tutmak güvenli değildir. Verilerinizin güvenliği için şifrelemeyi etkinleştirin ve bir parola belirleyin.</string>
     <string name="storage_access">Depolama Erişimi</string>
-    <string name="welcome_to_oabx">Neo Backup\'a Hoş Geldiniz!</string>
-    <string name="intro_welcome_message"> Neo Backup (eski adıyla OAndBackupX), ünlü OAndBackup\'ın bir çatalıdır ve OAndBackup\'ı 202X\'e taşımayı ve Neo Applications paketi içinde yer almayı amaçlar. Şu an için uygulama tamamen yeniden yazılmış olup, robust hale getirilmesi ve yedekleme/geri yükleme iş akışını herhangi bir cihazda kolaylaştıracak uzun süredir planlanan bazı özelliklerin eklenmesi hedeflenmektedir.
+    <string name="welcome_to_oabx">AnLite Backup\'a Hoş Geldiniz!</string>
+    <string name="intro_welcome_message"> AnLite Backup (eski adıyla OAndBackupX), ünlü OAndBackup\'ın bir çatalıdır ve OAndBackup\'ı 202X\'e taşımayı ve Neo Applications paketi içinde yer almayı amaçlar. Şu an için uygulama tamamen yeniden yazılmış olup, robust hale getirilmesi ve yedekleme/geri yükleme iş akışını herhangi bir cihazda kolaylaştıracak uzun süredir planlanan bazı özelliklerin eklenmesi hedeflenmektedir.
             \n Bu nedenle her türlü katkı her zaman memnuniyetle karşılanır.
             \n
             \n Uygulamamızın işlevselliği:

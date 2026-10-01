@@ -14,8 +14,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.machiav3lli.backup.ui.activities.NeoActivity
-import com.machiav3lli.backup.utils.SystemUtils
+import com.anlite.backup.ui.activities.AnLiteActivity
+import com.anlite.backup.utils.SystemUtils
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -30,7 +30,7 @@ class Test_SelectionSaveLoad {
 
     @get:Rule
     //var test = createAndroidComposeRule<MainActivityX>()
-    var test = createAndroidComposeRule(NeoActivity::class.java)
+    var test = createAndroidComposeRule(AnLiteActivity::class.java)
     //val test = createComposeRule()
 
     @Before

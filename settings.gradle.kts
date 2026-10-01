@@ -35,4 +35,4 @@ dependencyResolutionManagement {
         maven(url = "https://jitpack.io")
     }
 }
-rootProject.name = "Neo Backup"
+rootProject.name = "AnLiteBackup"

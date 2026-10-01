@@ -1,11 +1,11 @@
 package tests.tests
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.machiav3lli.backup.NeoApp
-import com.machiav3lli.backup.data.entity.Pref.Companion.escape
-import com.machiav3lli.backup.data.entity.Pref.Companion.fromSimpleFormat
-import com.machiav3lli.backup.data.entity.Pref.Companion.toSimpleFormat
-import com.machiav3lli.backup.data.entity.Pref.Companion.unescape
+import com.anlite.backup.AnLiteApp
+import com.anlite.backup.data.entity.Pref.Companion.escape
+import com.anlite.backup.data.entity.Pref.Companion.fromSimpleFormat
+import com.anlite.backup.data.entity.Pref.Companion.toSimpleFormat
+import com.anlite.backup.data.entity.Pref.Companion.unescape
 import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.Serializable
 import org.jetbrains.annotations.TestOnly
@@ -79,33 +79,33 @@ class Test_Serialization {
 
     @Test
     fun test_json_obj() {
-        val ser = NeoApp.toSerialized(NeoApp.JsonPretty, aObj)
+        val ser = AnLiteApp.toSerialized(AnLiteApp.JsonPretty, aObj)
         println("json: '\n$ser\n'")
-        val obj = NeoApp.fromSerialized<aClass>(ser)
+        val obj = AnLiteApp.fromSerialized<aClass>(ser)
         assertEquals(aObj, obj)
     }
 
     @Test
     fun test_json_map() {
-        val ser = NeoApp.toSerialized(NeoApp.JsonPretty, aMap)
+        val ser = AnLiteApp.toSerialized(AnLiteApp.JsonPretty, aMap)
         println("json: '\n$ser\n'")
-        val obj = NeoApp.fromSerialized<aClass>(ser)
+        val obj = AnLiteApp.fromSerialized<aClass>(ser)
         assertEquals(aMap, obj)
     }
 
     @Test
     fun test_yaml_obj() {
-        val ser = NeoApp.toSerialized(NeoApp.YamlDefault, aObj)
+        val ser = AnLiteApp.toSerialized(AnLiteApp.YamlDefault, aObj)
         println("yaml: '\n$ser\n'")
-        val obj = NeoApp.fromSerialized<aClass>(ser)
+        val obj = AnLiteApp.fromSerialized<aClass>(ser)
         assertEquals(aObj, obj)
     }
 
     @Test
     fun test_yaml_map() {
-        val ser = NeoApp.toSerialized(NeoApp.YamlDefault, aMap)
+        val ser = AnLiteApp.toSerialized(AnLiteApp.YamlDefault, aMap)
         println("yaml: '\n$ser\n'")
-        val obj = NeoApp.fromSerialized<aClass>(ser)
+        val obj = AnLiteApp.fromSerialized<aClass>(ser)
         assertEquals(aMap, obj)
     }
 

@@ -30,7 +30,7 @@
     <string name="restoreSuccess">Obnovení dokončeno</string>
     <string name="prefs_advanced">Pokročilé předvolby</string>
     <string name="prefs_enablespecial">Povolit speciální zálohy</string>
-    <string name="prefs_restorepermissions_summary">Obnovit oprávnění, která byla udělena aplikaci v moment zálohy. Vezměte prosím na vědomí, že některá oprávnění nelze udělit programově a mohou způsobit, že obnovení balíčku celkově selže, což Neo Backup poté opraví obnovením balíčku bez oprávnění.</string>
+    <string name="prefs_restorepermissions_summary">Obnovit oprávnění, která byla udělena aplikaci v moment zálohy. Vezměte prosím na vědomí, že některá oprávnění nelze udělit programově a mohou způsobit, že obnovení balíčku celkově selže, což AnLite Backup poté opraví obnovením balíčku bez oprávnění.</string>
     <string name="uninstallFailure">Chyba při odinstalaci</string>
     <string name="prefs_service_short">Služba</string>
     <string name="batchDeleteNothingToDelete">Žádné zálohy k odstranění</string>
@@ -120,7 +120,7 @@
     <string name="prefs_compression_level_summary">Nižší hodnota se zkomprimuje rychleji, ale výsledkem jsou větší soubory. Vyšší hodnota komprimuje lépe, ale trvá to déle.</string>
     <string name="prefs_disableverification_summary">Zakáže tuto vývojářskou možnost při obnovování souborů APK a poté ji znovu povolí. Vyřeší chybu: INSTALL_FAILED_VERIFICATION_FAILURE.</string>
     <string name="prefs_restoreallpermissions">Obnovit se všemi oprávněními</string>
-    <string name="prefs_copyselfapk_summary">Umístit kopii Neo Backup na nejvyšší úroveň složky se zálohou</string>
+    <string name="prefs_copyselfapk_summary">Umístit kopii AnLite Backup na nejvyšší úroveň složky se zálohou</string>
     <string name="prefs_acquirewakelock">Zabránit spánku</string>
     <string name="prefs_acquirewakelock_summary">Získat wakelock během dávkových operací, aby se zabránilo uspání. Výrazně urychluje zálohování a obnovu, ale spotřebovává více energie.</string>
     <string name="prefs_restoreallpermissions_summary">Dát obnovené aplikaci všechna oprávnění, která požaduje.</string>
@@ -169,7 +169,7 @@
     <string name="data_size">Velikost dat:</string>
     <string name="help_group_telegram">Naše skupina na Telegramu</string>
     <string name="enable_encryption_message">Není bezpečné uchovávat nezašifrovaná data v zařízení. Pro bezpečnost svých dat povolte šifrování a nastavte heslo.</string>
-    <string name="intro_welcome_message">Neo Backup (dříve OAndBackupX) je fork slavného OAndBackup s cílem přinést OAndBackup do 202X a součást sady Neo Applications. Prozatím je aplikace již kompletně přepsána, nadcházejícím krokem by mělo být její zpevnění a přidání některých dlouho plánovaných funkcí, které by mohly usnadnit práci se zálohováním/obnovou s libovolným zařízením.
+    <string name="intro_welcome_message">AnLite Backup (dříve OAndBackupX) je fork slavného OAndBackup s cílem přinést OAndBackup do 202X a součást sady Neo Applications. Prozatím je aplikace již kompletně přepsána, nadcházejícím krokem by mělo být její zpevnění a přidání některých dlouho plánovaných funkcí, které by mohly usnadnit práci se zálohováním/obnovou s libovolným zařízením.
 \n Proto jsou vždy vítány všechny typy příspěvků.
 \n
 \n Nyní k funkčnosti naší aplikace:
@@ -241,7 +241,7 @@
     <string name="help_appTypeHint">* Ikona typu aplikace bude šedá, pokud je aplikace odinstalována, a tmavě šedá, pokud je aplikace zakázána.</string>
     <string name="enable_encryption_title">Šifrování dat</string>
     <string name="storage_access">Přístup k úložišti</string>
-    <string name="welcome_to_oabx">Vítejte v Neo Backup!</string>
+    <string name="welcome_to_oabx">Vítejte v AnLite Backup!</string>
     <string name="intro_permission_storage">Aplikace využívá oprávnění ke čtení/zápisu do úložiště, aby mohla přistupovat k externímu úložišti a poskytovala možnost zálohování externích dat/obb jiných aplikací.</string>
     <string name="intro_permission_storage_location">Aplikace potřebuje umístění pro ukládání záloh. Aplikace může potřebovat několik gigabajtů úložného prostoru pro úplnou zálohu a často se dotazuje na souborový systém. Mějte to na paměti při výběru umístění úložiště v síti.</string>
     <string name="intro_permission_smsmms">Aplikace potřebuje toto oprávnění, aby mohla zálohovat/obnovit vaše SMS/MMS.</string>

@@ -82,7 +82,7 @@
     <!--prefs_summaryOldBackups: the quoted filter title is @string/showOldBackups-->
     <string name="prefs_oldbackups_summary">Sicherungen nach Anzahl von festgelegten Tagen filtern. Verwendet für „Alte Sicherungen anzeigen“.</string>
     <string name="prefs_copyselfapk">Eigene APK-Datei kopieren</string>
-    <string name="prefs_copyselfapk_summary">Erstelle eine Kopie von Neo Backup auf der höchsten Ebene im Sicherungsverzeichnis</string>
+    <string name="prefs_copyselfapk_summary">Erstelle eine Kopie von AnLite Backup auf der höchsten Ebene im Sicherungsverzeichnis</string>
     <string name="prefs_languages">Sprache</string>
     <string name="prefs_language_system">Systemsprache</string>
     <string name="prefs_rememberfiltering">Sortierung und Filter beibehalten</string>
@@ -177,8 +177,8 @@
     <string name="dialog_unlock">Entsperren</string>
     <string name="dialog_start">Los!</string>
     <string name="storage_access">Speicherzugriff</string>
-    <string name="welcome_to_oabx">Willkommen zu Neo Backup!</string>
-    <string name="intro_welcome_message">Neo Backup (ehemals OAndBackupX) ist ein Fork des berühmten OAndBackup mit dem Ziel es auf einen 202X Stand zu bringen. Es ist Teil der Neo Applications Suite. Im Moment ist die App bereits komplett neu geschrieben, in Zukunft soll sie noch robuster werden und einige lang geplante Features hinzufügen, die den Sicherungs-/Wiederherstellungsprozess mit jedem Gerät erleichtern könnten.
+    <string name="welcome_to_oabx">Willkommen zu AnLite Backup!</string>
+    <string name="intro_welcome_message">AnLite Backup (ehemals OAndBackupX) ist ein Fork des berühmten OAndBackup mit dem Ziel es auf einen 202X Stand zu bringen. Es ist Teil der Neo Applications Suite. Im Moment ist die App bereits komplett neu geschrieben, in Zukunft soll sie noch robuster werden und einige lang geplante Features hinzufügen, die den Sicherungs-/Wiederherstellungsprozess mit jedem Gerät erleichtern könnten.
 \n Daher sind alle Arten von Beiträgen immer willkommen.
 \n
 \n Nun zur Funktionalität unserer App:
@@ -335,7 +335,7 @@
     <string name="prefs_sessionIinstaller">das Session Installationsprogramm verwenden</string>
     <string name="prefs_sessionIinstaller_summary">das Session Installationsprogramm anstelle des Basis Installationsprogramm verwenden. Langsamer, aber vermeidet Probleme mit Android 13+</string>
     <string name="prefs_installerpackagename">Packetname des Installationsprogramms:</string>
-    <string name="prefs_restorepermissions_summary">Wiederherstellung der Berechtigungen, die der App zum Zeitpunkt der Sicherung gewährt waren. Beachte, dass einige Berechtigungen nicht programmatisch gewährt werden können und daher die Wiederherstellung des Pakets insgesamt fehlschlägt, was Neo Backup dann für die Wiederherstellung des Pakets ohne Berechtigungen übernimmt.</string>
+    <string name="prefs_restorepermissions_summary">Wiederherstellung der Berechtigungen, die der App zum Zeitpunkt der Sicherung gewährt waren. Beachte, dass einige Berechtigungen nicht programmatisch gewährt werden können und daher die Wiederherstellung des Pakets insgesamt fehlschlägt, was AnLite Backup dann für die Wiederherstellung des Pakets ohne Berechtigungen übernimmt.</string>
     <string name="supended_apps_cleanup">Bereinigung aller übrig gebliebenen angehaltenen Apps</string>
     <string name="sortBackupSize">Sicherungsgröße</string>
     <string name="edit_note">Notiz bearbeiten</string>

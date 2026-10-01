@@ -106,7 +106,7 @@
     <string name="help_group_matrix">הקבוצה שלנו ב-‎Matrix‏</string>
     <string name="help_legend">מקרא:</string>
     <string name="storage_access">הרשאה לאחסון</string>
-    <string name="welcome_to_oabx">ברוכים הבאים ל-‎Neo Backup‏!</string>
+    <string name="welcome_to_oabx">ברוכים הבאים ל-‎AnLite Backup‏!</string>
     <string name="prefs_biometriclock_summary">אבטח את היישום עם הנעילה הביומטרית של המכשיר (למשל טביעת אצבע או תמונת פנים)</string>
     <string name="filtered_list">רשימה מסוננת</string>
     <string name="no_file_manager_title">אין מנהל ‎SAF‏</string>
@@ -277,7 +277,7 @@
     <string name="show_old_apps">יישומים ישנים</string>
     <string name="sorting_order">סדר מיון</string>
     <string name="prefs_altbackupdate_summary">השתמש בתבנית ‎ISO‏ עבור תאריכי הגיבויים, במקום בצורה המקומית.</string>
-    <string name="prefs_restorepermissions_summary">שחזור ההרשאות שניתנו ליישום במועד יצירת הגיבוי. שים לב כי קיימות הרשאות שלא ניתנות לשחזור בצורה תכנותית, מה שגורם לתהליך השחזור להיכשל, אשר ‎Neo Backup‏ מכסה על ידי שחזור היישום ללא ההרשאות.</string>
+    <string name="prefs_restorepermissions_summary">שחזור ההרשאות שניתנו ליישום במועד יצירת הגיבוי. שים לב כי קיימות הרשאות שלא ניתנות לשחזור בצורה תכנותית, מה שגורם לתהליך השחזור להיכשל, אשר ‎AnLite Backup‏ מכסה על ידי שחזור היישום ללא ההרשאות.</string>
     <string name="prefs_installerpackagename">שם חבילת ההתקנה:</string>
     <string name="dark_high_contrast">כהה (ניגודיות גבוהה)</string>
     <string name="dark_medium_contrast">כהה (ניגודיות בינונית)</string>

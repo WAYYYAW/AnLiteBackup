@@ -4,12 +4,12 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
 import androidx.test.platform.app.InstrumentationRegistry
-import com.machiav3lli.backup.ADMIN_PREFIX
-import com.machiav3lli.backup.NeoApp
-import com.machiav3lli.backup.data.entity.StorageFile
-import com.machiav3lli.backup.data.entity.UndeterminedStorageFile
-import com.machiav3lli.backup.data.entity.uriFromFile
-import com.machiav3lli.backup.utils.TraceUtils
+import com.anlite.backup.ADMIN_PREFIX
+import com.anlite.backup.AnLiteApp
+import com.anlite.backup.data.entity.StorageFile
+import com.anlite.backup.data.entity.UndeterminedStorageFile
+import com.anlite.backup.data.entity.uriFromFile
+import com.anlite.backup.utils.TraceUtils
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.Test
@@ -30,12 +30,12 @@ class Test_StorageFile {
         0    -> DocumentFile.fromFile(baseDirAsFile).uri    // Unknown authority
         0    -> // same as uriFromFile below                   Failed to find configured root
             FileProvider.getUriForFile(
-                NeoApp.context,
-                "${NeoApp.context.packageName}.provider",
+                AnLiteApp.context,
+                "${AnLiteApp.context.packageName}.provider",
                 baseDirAsFile
             )
-        1    -> NeoApp.backupRoot?.uri!!
-        else -> NeoApp.context.uriFromFile(baseDirAsFile)
+        1    -> AnLiteApp.backupRoot?.uri!!
+        else -> AnLiteApp.context.uriFromFile(baseDirAsFile)
     }
     val baseDir = when (1) {
         1    -> StorageFile.fromUri(baseDirUri)     // SAF

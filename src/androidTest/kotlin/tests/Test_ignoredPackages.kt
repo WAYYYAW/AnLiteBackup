@@ -1,8 +1,8 @@
 package tests.tests
 
-import com.machiav3lli.backup.manager.actions.BaseAppAction.Companion.doNotStop
-import com.machiav3lli.backup.manager.actions.BaseAppAction.Companion.ignoredPackages
-import com.machiav3lli.backup.utils.SystemUtils
+import com.anlite.backup.manager.actions.BaseAppAction.Companion.doNotStop
+import com.anlite.backup.manager.actions.BaseAppAction.Companion.ignoredPackages
+import com.anlite.backup.utils.SystemUtils
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

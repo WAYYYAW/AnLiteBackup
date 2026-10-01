@@ -81,7 +81,7 @@
     <!--prefs_summaryOldBackups: the quoted filter title is @string/showOldBackups-->
     <string name="prefs_oldbackups_summary">Filtrer les sauvegardes plus anciennes que le nombre de jours. Utilisé avec le filtre « Afficher les anciennes sauvegardes ».</string>
     <string name="prefs_copyselfapk">Copier son propre APK</string>
-    <string name="prefs_copyselfapk_summary">Placer une copie de Neo Backup au niveau supérieur du dossier de sauvegarde</string>
+    <string name="prefs_copyselfapk_summary">Placer une copie de AnLite Backup au niveau supérieur du dossier de sauvegarde</string>
     <string name="prefs_languages">Langue</string>
     <string name="prefs_language_system">Système par défaut</string>
     <string name="prefs_rememberfiltering">Enregistrer les critères de tri et les filtres</string>
@@ -175,7 +175,7 @@
     <string name="intro_permission_usageaccess">L\'application a besoin de cette autorisation pour pouvoir vérifier les statistiques, la taille des données et du cache de vos applications.</string>
     <string name="intro_permission_storage_location">L\'application a besoin d\'un emplacement de sauvegarde pour stocker les sauvegardes. L\'application peut avoir besoin de quelques gigaoctets de stockage pour une sauvegarde complète et utilise beaucoup le système de fichiers. Veuillez garder cela à l\'esprit lorsque vous choisissez des emplacements de stockage en réseau.</string>
     <string name="intro_permission_storage">L\'application utilise une autorisation de lecture/écriture du stockage pour pouvoir accéder au stockage externe et offrir la possibilité de sauvegarder des données externes data/obb d\'autres applications.</string>
-    <string name="intro_welcome_message">Neo Backup (anciennement OAndBackupX) est un fork du célèbre OAndBackup dans le but d\'amener OAndBackup sur 202X et de faire partie de la suite Neo Applications. Pour l\'instant, l\'application est déjà entièrement réécrite, il s\'agit maintenant de la rendre plus robuste et d\'ajouter quelques fonctionnalités prévues de longue date qui pourraient faciliter le flux de travail de sauvegarde/restauration avec n\'importe quel appareil.
+    <string name="intro_welcome_message">AnLite Backup (anciennement OAndBackupX) est un fork du célèbre OAndBackup dans le but d\'amener OAndBackup sur 202X et de faire partie de la suite Neo Applications. Pour l\'instant, l\'application est déjà entièrement réécrite, il s\'agit maintenant de la rendre plus robuste et d\'ajouter quelques fonctionnalités prévues de longue date qui pourraient faciliter le flux de travail de sauvegarde/restauration avec n\'importe quel appareil.
 \n Par conséquent, tous les types de contribution sont toujours les bienvenus.
 \n
 \n Maintenant sur la fonctionnalité de notre application :
@@ -189,7 +189,7 @@
     <string name="prefs_password_match_false">Les mots de passe ne correspondent pas</string>
     <string name="prefs_password_match_true">Les mots de passe correspondent</string>
     <string name="prefs_passwordconfirmation">Confirmation du mot de passe du chiffrement</string>
-    <string name="welcome_to_oabx">Bienvenue sur Neo Backup !</string>
+    <string name="welcome_to_oabx">Bienvenue sur AnLite Backup !</string>
     <string name="storage_access">Accès au stockage</string>
     <string name="dialog_unlock">Déverouiller</string>
     <string name="dialog_start">Allons-y !</string>
@@ -307,7 +307,7 @@
     <string name="sortBackupDate">Date de la sauvegarde</string>
     <string name="prefs_accent_8">Citrouille perano</string>
     <string name="prefs_restorepermissions">Restaurer les autorisations</string>
-    <string name="prefs_restorepermissions_summary">Restaurer les autorisations qui étaient accordées à l\'application au moment de la sauvegarde. Notez que certaines permissions ne peuvent pas être accordées de manière programmatique et font donc échouer la restauration du paquet dans son ensemble, ce que Neo Backup couvre alors en restaurant le paquet sans autorisations.</string>
+    <string name="prefs_restorepermissions_summary">Restaurer les autorisations qui étaient accordées à l\'application au moment de la sauvegarde. Notez que certaines permissions ne peuvent pas être accordées de manière programmatique et font donc échouer la restauration du paquet dans son ensemble, ce que AnLite Backup couvre alors en restaurant le paquet sans autorisations.</string>
     <string name="spec_calllogsjson">Journaux d\'appels JSON</string>
     <string name="dialogCancelAll">Tout annuler</string>
     <string name="grant_smsmms_message">C\'est essentiel pour pouvoir sauvegarder/restaurer vos SMS/MMS.</string>

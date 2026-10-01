@@ -5,7 +5,7 @@
     <string name="grant_usage_access_message">Це важливо для отримання інформації про розміри файлів застосунка</string>
     <string name="showSplitAPKs">Спліт-APK</string>
     <string name="no_file_manager_message">Немає файлового менеджера для управління SAF. Можливо, ви відключили вбудований менеджер файлів. Будь ласка, відновіть його або ввімкніть знову.</string>
-    <string name="intro_welcome_message">Neo Backup (раніше OAndBackupX) - це форк відомого OAndBackup з метою перенесення OAndBackup на 202X та частина пакету Neo Applications. На даний момент застосунок вже повністю переписана, на черзі - підвищення її надійності та додавання деяких давно запланованих функцій, які можуть полегшити процес резервного копіювання/відновлення з будь-якого пристрою.
+    <string name="intro_welcome_message">AnLite Backup (раніше OAndBackupX) - це форк відомого OAndBackup з метою перенесення OAndBackup на 202X та частина пакету Neo Applications. На даний момент застосунок вже повністю переписана, на черзі - підвищення її надійності та додавання деяких давно запланованих функцій, які можуть полегшити процес резервного копіювання/відновлення з будь-якого пристрою.
 \n Тому всі види допомоги завжди вітаються.
 \n
 \n Тепер про функціональність нашого застосунку:
@@ -48,7 +48,7 @@
     <string name="intro_permission_batteryoptimization">Застосунокк може зіткнутися з деякими проблемами при виконанні запланованих резервних копій на деяких ПЗУ, які приймають агресивну оптимізацію батареї, наприклад MIUI, але навіть на AOSP така проблема може статися.</string>
     <string name="intro_permission_usageaccess">Застосунок потребує цього дозволу, щоб мати можливість перевіряти статистику та розміри даних та кеш ваших застосунків.</string>
     <string name="intro_permission_storage_location">Застосунок потребує резервного місця для зберігання резервних копій. Застосунку може знадобитися кілька гігабайт пам’яті для повного резервного копіювання та багато запитує файлову систему. Будь ласка, майте це на увазі, вибираючи місця зберігання на основі мережі.</string>
-    <string name="welcome_to_oabx">Вас вітає Neo Backup!</string>
+    <string name="welcome_to_oabx">Вас вітає AnLite Backup!</string>
     <string name="storage_access">Доступ до сховища</string>
     <string name="enable_encryption_message">Небезпечно зберігати ваші дані на пристрої не зашифрованими. Для безпеки ваших даних увімкніть шифрування та встановіть пароль.</string>
     <string name="enable_encryption_title">Шифрування даних</string>
@@ -126,7 +126,7 @@
     <string name="prefs_logviewer">Переглянути журнал</string>
     <string name="prefs_saveappslist_summary">Записує список програм у файл .txt у каталозі резервної копії користувача</string>
     <string name="prefs_saveappslist">Зберегти список застосунків</string>
-    <string name="prefs_copyselfapk_summary">Помістити копію Neo Backup на верхній рівень теки резервної копії</string>
+    <string name="prefs_copyselfapk_summary">Помістити копію AnLite Backup на верхній рівень теки резервної копії</string>
     <string name="prefs_copyselfapk">Копіювати власний APK</string>
     <string name="prefs_batchdelete_summary">Видалити резервні копії всіх програм, які зараз не встановлені.</string>
     <string name="prefs_batchdelete">Видалити Резервні копії?</string>
@@ -326,7 +326,7 @@
     <string name="sortDesc">Спадання</string>
     <string name="prefs_loadingtoasts_summary">Показувати сповіщення, поки завантажується перелік</string>
     <string name="prefs_restorepermissions">Відновити дозволи</string>
-    <string name="prefs_restorepermissions_summary">Відновити дозволи, надані програмі станом на мить резервного копіювання. Зауважте, деякі дозволи неможливо надати програмно: це викликає збій цілісного відновлення пакунка, й Neo Backup повторює спробу відновлення пакунка без збереження дозволів.</string>
+    <string name="prefs_restorepermissions_summary">Відновити дозволи, надані програмі станом на мить резервного копіювання. Зауважте, деякі дозволи неможливо надати програмно: це викликає збій цілісного відновлення пакунка, й AnLite Backup повторює спробу відновлення пакунка без збереження дозволів.</string>
     <string name="prefs_loadingtoasts">Прогрес завантаження</string>
     <string name="supended_apps_cleanup">вилучити залишені призупинені застосунки</string>
     <string name="root_missing">ROOT відсутній!</string>

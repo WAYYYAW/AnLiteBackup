@@ -43,11 +43,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.machiav3lli.backup"
+    namespace = "com.anlite.backup"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.machiav3lli.backup"
+        applicationId = "com.anlite.backup"
         minSdk = 26
         targetSdk = 36
         versionCode = 8331
@@ -71,14 +71,6 @@ android {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
         }
-        create("neo") {
-            applicationIdSuffix = ".neo"
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
     }
 
     val generateLocales by tasks.registering(GenerateBuildConfig::class) {
@@ -101,7 +93,7 @@ android {
         variant.outputs.forEach { output ->
             if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
                 output.outputFileName.set(
-                    "Neo_Backup_${output.versionName.get()}_${variant.buildType}.apk"
+                    "AnLite_Backup_${output.versionName.get()}_${variant.buildType}.apk"
                 )
             }
         }
@@ -248,11 +240,11 @@ abstract class GenerateBuildConfig : DefaultTask() {
         }
 
         val outputFile =
-            outputDir.file("com/machiav3lli/backup/config/BuildConfig.kt").get().asFile
+            outputDir.file("com/anlite/backup/config/BuildConfig.kt").get().asFile
         outputFile.parentFile.mkdirs()
         outputFile.writeText(
             """
-            package com.machiav3lli.backup.config
+            package com.anlite.backup.config
             
             object BuildConfig {
                 val DETECTED_LOCALES: Array<String> = arrayOf(${

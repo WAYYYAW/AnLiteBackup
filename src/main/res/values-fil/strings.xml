@@ -141,7 +141,7 @@
     <string name="prefs_nobackupdata_rst">I-restore ang no_backup na file</string>
     <string name="prefs_installerpackagename">Ang pangalan ng package ng installer:</string>
     <string name="prefs_restorepermissions">I-restore ang mga pahintulot</string>
-    <string name="prefs_restorepermissions_summary">Rine-restore ang mga pahintulot na ipinagkaloob sa app sa oras ng backup. Tandaan na may mga pahintulot na hindi maaaring ibalik nang awtomatiko, kaya maaaring magdulot ito ng kabiguan sa buong proseso ng pag-restore ng package, na kung saan ay pinapalitan ng Neo Backup ang pag-restore ng package nang walang mga pahintulot.</string>
+    <string name="prefs_restorepermissions_summary">Rine-restore ang mga pahintulot na ipinagkaloob sa app sa oras ng backup. Tandaan na may mga pahintulot na hindi maaaring ibalik nang awtomatiko, kaya maaaring magdulot ito ng kabiguan sa buong proseso ng pag-restore ng package, na kung saan ay pinapalitan ng AnLite Backup ang pag-restore ng package nang walang mga pahintulot.</string>
     <string name="prefs_deviceprotecteddata">I-back up ang data na protektado ng device</string>
     <string name="prefs_deviceprotecteddata_summary">Bina-back up ang data na inilagay sa data/user_de</string>
     <string name="prefs_sessionIinstaller">Gamitin ang session installer</string>

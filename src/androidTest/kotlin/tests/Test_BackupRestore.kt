@@ -1,19 +1,19 @@
 package tests.tests
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.machiav3lli.backup.ENCRYPTION
-import com.machiav3lli.backup.NeoApp
-import com.machiav3lli.backup.data.entity.RootFile
-import com.machiav3lli.backup.data.entity.StorageFile
-import com.machiav3lli.backup.data.entity.UndeterminedStorageFile
-import com.machiav3lli.backup.manager.actions.BackupAppAction
-import com.machiav3lli.backup.manager.actions.RestoreAppAction
-import com.machiav3lli.backup.manager.handler.ShellHandler
-import com.machiav3lli.backup.manager.handler.ShellHandler.Companion.quote
-import com.machiav3lli.backup.manager.handler.ShellHandler.Companion.runAsRoot
-import com.machiav3lli.backup.manager.handler.ShellHandler.Companion.utilBox
-import com.machiav3lli.backup.manager.handler.ShellHandler.Companion.utilBoxQ
-import com.machiav3lli.backup.ui.pages.pref_encryption_mode
+import com.anlite.backup.ENCRYPTION
+import com.anlite.backup.AnLiteApp
+import com.anlite.backup.data.entity.RootFile
+import com.anlite.backup.data.entity.StorageFile
+import com.anlite.backup.data.entity.UndeterminedStorageFile
+import com.anlite.backup.manager.actions.BackupAppAction
+import com.anlite.backup.manager.actions.RestoreAppAction
+import com.anlite.backup.manager.handler.ShellHandler
+import com.anlite.backup.manager.handler.ShellHandler.Companion.quote
+import com.anlite.backup.manager.handler.ShellHandler.Companion.runAsRoot
+import com.anlite.backup.manager.handler.ShellHandler.Companion.utilBox
+import com.anlite.backup.manager.handler.ShellHandler.Companion.utilBoxQ
+import com.anlite.backup.ui.pages.pref_encryption_mode
 import com.topjohnwu.superuser.ShellUtils.fastCmd
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -57,7 +57,7 @@ class Test_BackupRestore {
         @BeforeClass
         @JvmStatic
         fun setupClass() {
-            shellHandler = NeoApp.Companion.shellHandler!!
+            shellHandler = AnLiteApp.Companion.shellHandler!!
             //tempDir = RootFile(context.cacheDir, "test_backup_restore")
             tempDir = RootFile(context.dataDir, "test_backup_restore")
             //tempDir = RootFile("/data/local/tmp/test_backup_restore")

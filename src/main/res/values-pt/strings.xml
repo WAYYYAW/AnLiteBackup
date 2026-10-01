@@ -81,7 +81,7 @@
     <!--prefs_summaryOldBackups: the quoted filter title is @string/showOldBackups-->
     <string name="prefs_oldbackups_summary">Filtrar backups mais antigos do que o valor em dias. Usado com o filtro \'Mostrar backups antigos\'.</string>
     <string name="prefs_copyselfapk">Copiar o próprio APK</string>
-    <string name="prefs_copyselfapk_summary">Colocar uma cópia do Neo Backup no nível superior da pasta de backup</string>
+    <string name="prefs_copyselfapk_summary">Colocar uma cópia do AnLite Backup no nível superior da pasta de backup</string>
     <string name="prefs_languages">Idioma</string>
     <string name="prefs_language_system">Idioma de sistema</string>
     <string name="prefs_rememberfiltering">Memorizar ordem e filtro</string>
@@ -168,7 +168,7 @@
     <string name="enable_encryption_title">Cifra de dados</string>
     <string name="enable_encryption_message">Não é seguro manter os seus dados no aparelho não encriptados. Para a segurança dos seus dados, ative a encriptação e defina uma palavra-passe.</string>
     <string name="storage_access">Acesso ao Armazenamento</string>
-    <string name="welcome_to_oabx">Bem-vindo a Neo Backup!</string>
+    <string name="welcome_to_oabx">Bem-vindo a AnLite Backup!</string>
     <string name="intro_permission_storage">A aplicação usa a permissão armazenamento ler/escrever para ser capaz de aceder o armazenamento externo e fornecer a possibilidade para o backup de dados/obb externos de outras aplicações.</string>
     <string name="intro_permission_usageaccess">A aplicação precisa desta permissão para poder verificar as estatísticas e o tamanho dos dados e cache das aplicações.</string>
     <string name="intro_permission_batteryoptimization">A aplicações pode enfrentar alguns problemas ao fazer backups programados em algumas ROMs que adotam uma otimização agressiva da bateria, por exemplo MIUI, mas mesmo em AOSP puro tal problema pode acontecer.</string>
@@ -179,7 +179,7 @@
     <string name="prefs_deviceprotecteddata">Fazer backup dos dados protegidos no dispositivo</string>
     <string name="restart_dialog">Parece que necessita reiniciar a aplicação</string>
     <string name="empty_filtered_list">A lista de filtros está vazia.</string>
-    <string name="intro_welcome_message">Neo Backup (anteriormente OAndBackupX) é um fork do famoso OAndBackup com o objetivo de trazer OAndBackup para 202X e parte do pacote Neo Applications. Por enquanto, o aplicativo já está totalmente reescrito, o que o torna robusto e incrementa alguns recursos bastante planejados que poderiam facilitar o fluxo de trabalho de backup/restauração com qualquer dispositivo.
+    <string name="intro_welcome_message">AnLite Backup (anteriormente OAndBackupX) é um fork do famoso OAndBackup com o objetivo de trazer OAndBackup para 202X e parte do pacote Neo Applications. Por enquanto, o aplicativo já está totalmente reescrito, o que o torna robusto e incrementa alguns recursos bastante planejados que poderiam facilitar o fluxo de trabalho de backup/restauração com qualquer dispositivo.
 \n Portanto, todos os tipos de contribuição são sempre bem-vindos.
 \n
 \n Agora sobre as funcionalidades do nosso App:
@@ -330,7 +330,7 @@
     <string name="loading_list">A carregar lista…</string>
     <string name="intro_permission_smsmms">A aplicação precisa desta permissão para poder fazer o backup/restauro das suas SMS/MMS.</string>
     <string name="intro_permission_contacts">A aplicação precisa desta permissão para associar um contacto a uma SMS/MMS.</string>
-    <string name="prefs_restorepermissions_summary">Restaura as permissões que não foram concedidas durante o backup. Tenha em atenção de que algumas permissões não podem ser concedidas automaticamente e o restauro da aplicação pode falhar. Se tal acontecer, Neo Backup restaura o pacote sem as permissões.</string>
+    <string name="prefs_restorepermissions_summary">Restaura as permissões que não foram concedidas durante o backup. Tenha em atenção de que algumas permissões não podem ser concedidas automaticamente e o restauro da aplicação pode falhar. Se tal acontecer, AnLite Backup restaura o pacote sem as permissões.</string>
     <string name="dismiss">Rejeitar</string>
     <string name="enabled">Ativa</string>
     <string name="sortAsc">Ascendente</string>

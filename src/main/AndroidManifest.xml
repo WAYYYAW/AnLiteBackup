@@ -56,7 +56,7 @@
         android:required="false" />
 
     <application
-        android:name=".NeoApp"
+        android:name=".AnLiteApp"
         android:allowBackup="false"
         android:allowClearUserData="true"
         android:banner="@mipmap/ic_launcher"
@@ -108,7 +108,7 @@
         </service>
 
         <activity
-            android:name=".ui.activities.NeoActivity"
+            android:name=".ui.activities.AnLiteActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

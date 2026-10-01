@@ -19,10 +19,10 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.machiav3lli.backup.ui.compose.component.BalancedWrapRow
-import com.machiav3lli.backup.ui.compose.component.balancedWrap
-import com.machiav3lli.backup.ui.compose.icons.Phosphor
-import com.machiav3lli.backup.ui.compose.icons.phosphor.Star
+import com.anlite.backup.ui.compose.component.BalancedWrapRow
+import com.anlite.backup.ui.compose.component.balancedWrap
+import com.anlite.backup.ui.compose.icons.Phosphor
+import com.anlite.backup.ui.compose.icons.phosphor.Star
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

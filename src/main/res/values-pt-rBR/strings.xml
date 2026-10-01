@@ -26,7 +26,7 @@
     <string name="intro_permission_usageaccess">O app precisa dessa permissão para verificar as estatísticas e os tamanhos dos dados e do cache de seus aplicativos.</string>
     <string name="intro_permission_storage_location">O app precisa de um local de backup para armazenar os backups. O app pode precisar de alguns gigabytes de armazenamento para um backup completo e está consultando muito o sistema de arquivos. Tenha isso em mente ao escolher locais de armazenamento baseados em rede.</string>
     <string name="intro_permission_storage">O app usa a permissão de leitura/gravação do armazenamento para poder acessar o armazenamento externo e fornecer a possibilidade do backup de dados externos/obb de outros aplicativos.</string>
-    <string name="intro_welcome_message">Neo Backup (anteriormente OAndBackupX) é um fork do famoso OAndBackup com o objetivo de trazer o OAndBackup para 202X e parte do pacote de Aplicativos Neo. Por enquanto, o aplicativo já está totalmente reescrito, tornando-o robusto e adicionando alguns recursos planejados há muito tempo que podem facilitar o fluxo de trabalho de backup/restauração com qualquer dispositivo.
+    <string name="intro_welcome_message">AnLite Backup (anteriormente OAndBackupX) é um fork do famoso OAndBackup com o objetivo de trazer o OAndBackup para 202X e parte do pacote de Aplicativos Neo. Por enquanto, o aplicativo já está totalmente reescrito, tornando-o robusto e adicionando alguns recursos planejados há muito tempo que podem facilitar o fluxo de trabalho de backup/restauração com qualquer dispositivo.
 \nPortanto, todos os tipos de contribuição são sempre bem-vindos.
 \n
 \nAgora sobre a funcionalidade do nosso App:
@@ -74,7 +74,7 @@
     <string name="spec_appwidgets">Widgets do app</string>
     <string name="sched_excludeSystemCheckBox">Excluir apps do sistema</string>
     <string name="sched_startingbackup">Iniciando backup agendado…</string>
-    <string name="prefs_copyselfapk_summary">Colocar uma cópia do Neo Backup no nível superior da pasta de backup</string>
+    <string name="prefs_copyselfapk_summary">Colocar uma cópia do AnLite Backup no nível superior da pasta de backup</string>
     <string name="prefs_copyselfapk">Copiar o próprio APK</string>
     <string name="prefs_batchdelete_summary">Excluir backups de todos os apps não instalados atualmente.</string>
     <string name="prefs_batchdelete">Excluir backups\?</string>
@@ -252,7 +252,7 @@
     <string name="help_issues">Problemas conhecidos</string>
     <string name="fetching_action_list">Obtendo lista de apps para %1$s…</string>
     <string name="logs_text_empty">Não há nada a mostrar!</string>
-    <string name="welcome_to_oabx">Bem-vindo ao Neo Backup!</string>
+    <string name="welcome_to_oabx">Bem-vindo ao AnLite Backup!</string>
     <string name="storage_access">Acesso ao Armazenamento</string>
     <string name="help_faq">Perguntas frequentes</string>
     <string name="help_group_telegram">Nosso Grupo no Telegram</string>
@@ -376,7 +376,7 @@
     <string name="prefs_deviceprotecteddata_rst">Restaurar dados protegidos do dispositivo</string>
     <string name="prefs_externaldata_rst_summary">Restaura dados que são colocados no armazenamento externo (Ex: /storage/emulated/0/Android/data/)</string>
     <string name="prefs_nobackupdata_rst_summary">Restaura arquivos dos dados que são marcados para não ser feito o backup</string>
-    <string name="prefs_restorepermissions_summary">Restaurar permissões que foram concedidas ao aplicativo no momento do backup. Note que algumas permissões não podem ser concedidas de forma programática e assim fazer com que a restauração do pacote falhe como um todo, que o Neo Backup então cobre restaurar o pacote sem permissões.</string>
+    <string name="prefs_restorepermissions_summary">Restaurar permissões que foram concedidas ao aplicativo no momento do backup. Note que algumas permissões não podem ser concedidas de forma programática e assim fazer com que a restauração do pacote falhe como um todo, que o AnLite Backup então cobre restaurar o pacote sem permissões.</string>
     <string name="post_notifications_permission_message">A partir do Android 13, os aplicativos exigem essa permissão para poder postar notificações.</string>
     <string name="post_notifications_permission_title">Postar Notificações</string>
     <string name="filters_launchable">Inicializável</string>

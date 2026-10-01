@@ -105,7 +105,7 @@
     <string name="help_faq">Dažniausiai užduodami klausimai</string>
     <string name="enable_encryption_title">Duomenų šifravimas</string>
     <string name="storage_access">Prieiga prie saugyklos</string>
-    <string name="welcome_to_oabx">Sveiki atvykę į Neo Backup!</string>
+    <string name="welcome_to_oabx">Sveiki atvykę į AnLite Backup!</string>
     <string name="delete_all_backups">Ištrinti visas atsargines kopijas</string>
     <string name="radio_launchable">Paleidžiamos programos</string>
     <string name="usage_notes_title">Naudojimo pastabos</string>
@@ -274,7 +274,7 @@
     <string name="prefs_disableverification">Išjungti „Patvirtinti programėles per USB“</string>
     <string name="prefs_stopcont">STOP-CONT išankstinis ir vėlesnis programėlių apdorojimas atsarginės kopijos kūrimo/atkūrimo metu</string>
     <string name="prefs_copyselfapk">Kopijuoti savo APK</string>
-    <string name="prefs_copyselfapk_summary">Padėkite Neo Backup kopiją į viršutinį atsarginių kopijų aplanko lygį</string>
+    <string name="prefs_copyselfapk_summary">Padėkite AnLite Backup kopiją į viršutinį atsarginių kopijų aplanko lygį</string>
     <string name="prefs_saveappslist">Išsaugoti programėlių sąrašą</string>
     <string name="sched_interval">Intervalas dienomis:</string>
     <string name="sched_timeLeft">Likęs laikas:</string>
@@ -282,7 +282,7 @@
     <string name="error_creating_notification_channel">Nepavyko sukurti pranešimų kanalo</string>
     <string name="error_updating_schedule_mode">Klaida atnaujinant %1$s tvarkaraštį %2$d</string>
     <string name="apptype_special">Speciali atsarginė kopija</string>
-    <string name="intro_welcome_message">Neo Backup (anksčiau OAndBackupX) yra garsiosios OAndBackup atška, kurios tikslas - perkelti OAndBackup į 202X ir Neo programų paketo dalį. Šiuo metu programėlė jau visiškai perrašyta, o artimiausiu metu bus siekiama ją padaryti patikimą ir pridėti keletą ilgai planuotų funkcijų, kurios galėtų palengvinti atsarginių kopijų kūrimo ir atkūrimo procesą naudojant bet kokį įrenginį.
+    <string name="intro_welcome_message">AnLite Backup (anksčiau OAndBackupX) yra garsiosios OAndBackup atška, kurios tikslas - perkelti OAndBackup į 202X ir Neo programų paketo dalį. Šiuo metu programėlė jau visiškai perrašyta, o artimiausiu metu bus siekiama ją padaryti patikimą ir pridėti keletą ilgai planuotų funkcijų, kurios galėtų palengvinti atsarginių kopijų kūrimo ir atkūrimo procesą naudojant bet kokį įrenginį.
 \n Todėl visuomet laukiame visų tipų indėlio.
 \n
 \n Dabar apie mūsų programėlės funkcionalumą:
@@ -303,7 +303,7 @@
     <string name="sortBackupSize">Atsarginės kopijos dydis</string>
     <string name="smsmms_permission_title">SMS / MMS leidimai</string>
     <string name="prefs_installerpackagename">Diegiklio paketo pavadinimas:</string>
-    <string name="prefs_restorepermissions_summary">Atkurkite leidimus, kurie buvo suteikti programai atsarginės kopijos kūrimo metu. Atminkite, kad kai kurie leidimai negali būti suteikti programiškai, todėl nepavyksta atkurti viso paketo, o „Neo Backup“ tada apima paketo atkūrimą be leidimų.</string>
+    <string name="prefs_restorepermissions_summary">Atkurkite leidimus, kurie buvo suteikti programai atsarginės kopijos kūrimo metu. Atminkite, kad kai kurie leidimai negali būti suteikti programiškai, todėl nepavyksta atkurti viso paketo, o „AnLite Backup“ tada apima paketo atkūrimą be leidimų.</string>
     <string name="prefs_dev_settings">Kūrėjo nustatymai</string>
     <string name="prefs_dev_settings_summary">Nekeiskite, nebent kūrėjas lieptų!</string>
     <string name="spec_smsmmsjson">SMS / MMS JSON</string>

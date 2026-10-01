@@ -127,7 +127,7 @@
     <string name="prefs_rememberfiltering_summary">Sprema odabranu metodu poredavanja i filtriranja. Uzimaju se u obzir samo oni označeni potvrdnim okvirom u izborniku.</string>
     <string name="prefs_dev_settings">Postavke razvojnih programera</string>
     <string name="batchDeleteNothingToDelete">Nema sigurnosnih kopija za brisanje</string>
-    <string name="prefs_restorepermissions_summary">Vraća dopuštenja koja su dodijeljena aplikaciji u trenutku izrade sigurnosne kopije. Imajte na umu da se neka dopuštenja ne mogu dodijeliti programski i tako uzrokuju neuspjeh vraćanja paketa u cjelini, što Neo Backup zatim rješava vraćanje paketa bez dopuštenja.</string>
+    <string name="prefs_restorepermissions_summary">Vraća dopuštenja koja su dodijeljena aplikaciji u trenutku izrade sigurnosne kopije. Imajte na umu da se neka dopuštenja ne mogu dodijeliti programski i tako uzrokuju neuspjeh vraćanja paketa u cjelini, što AnLite Backup zatim rješava vraćanje paketa bez dopuštenja.</string>
     <string name="showNotInstalled">Neinstalirane aplikacije</string>
     <string name="prefs_oldbackups">Filtriraj sigurnosne kopije po starini</string>
     <string name="search">Pretraži</string>
@@ -177,7 +177,7 @@
     <string name="prefs_enablespecial">Omogući posebne sigurnosne kopije</string>
     <string name="error_pmDataIncompleteException_dataRestoreFailed">Podaci aplikacije nisu bili vraćeni.</string>
     <string name="prefs_numBackupRevisions">Broj revizija sigurnosnih kopija</string>
-    <string name="prefs_copyselfapk_summary">Postavi kopiju Neo Backupa na glavnu razinu mape za sigurnosne kopije</string>
+    <string name="prefs_copyselfapk_summary">Postavi kopiju AnLite Backupa na glavnu razinu mape za sigurnosne kopije</string>
     <string name="prefs_language_system">Sistemski zadano</string>
     <string name="prefs_externaldata_rst">Vrati vanjske podatke</string>
     <string name="prefs_obbdata_rst">Vrati obb datoteke</string>
@@ -241,7 +241,7 @@
     <string name="help_group_matrix">Naša Grupa na Matrixu</string>
     <string name="prefs_theme_dynamic">Dinamična tema</string>
     <string name="sched_imported">Zakazivanje uspješno uvezeno</string>
-    <string name="welcome_to_oabx">Dobrodošli u Neo Backup!</string>
+    <string name="welcome_to_oabx">Dobrodošli u AnLite Backup!</string>
     <string name="prefs_advanced_short">Napredno</string>
     <string name="delete_all_backups">Izbriši sve sigurnosne kopije</string>
     <string name="help_appTypeHint">* Tip ikone aplikacije bude sivi ukoliko je aplikacija deinstalirana i tamnosivi ako je aplikacija onemogućena.</string>
@@ -360,7 +360,7 @@
     <string name="app_size">Veličina Aplikacije:</string>
     <string name="help_legend">Legenda:</string>
     <string name="show_new_apps">Nove aplikacije</string>
-    <string name="intro_welcome_message">"Neo Backup (u prošlosti poznat kao OAndBackupX) je fork poznatog OAndBackupa s ciljem da se OAndBackup dovede u 202X i dio paketa Neo Applications. Za sada je aplikacija već u potpunosti prepisana, a uskoro bi je učinili robusnom i dodali neke dugo planirane značajke koje bi mogle olakšati radni tijek sigurnosnog kopiranja/vraćanja na bilo kojem uređaju.\n\n Stoga su sve vrste doprinosa uvijek dobrodošle.\n\n\n\n Sada o funkcionalnosti naše aplikacije:\n\n  • Zahtijeva root i omogućuje sigurnosno kopiranje pojedinačnih aplikacija i njihovih podataka.\n\n  • Podržano je i sigurnosno kopiranje i vraćanje pojedinačnih programa jedan po jedan i skupno spašavanje i vraćanje više programa.\n\n  • Vraćanje aplikacija sustava trebalo bi biti moguće bez potrebe za ponovnim pokretanjem.\n\n  • Sigurnosne kopije mogu se zakazivati bez ograničenja broja pojedinačnih rasporeda, a postoji i mogućnost stvaranja prilagođenih popisa sa liste instaliranih aplikacija."</string>
+    <string name="intro_welcome_message">"AnLite Backup (u prošlosti poznat kao OAndBackupX) je fork poznatog OAndBackupa s ciljem da se OAndBackup dovede u 202X i dio paketa Neo Applications. Za sada je aplikacija već u potpunosti prepisana, a uskoro bi je učinili robusnom i dodali neke dugo planirane značajke koje bi mogle olakšati radni tijek sigurnosnog kopiranja/vraćanja na bilo kojem uređaju.\n\n Stoga su sve vrste doprinosa uvijek dobrodošle.\n\n\n\n Sada o funkcionalnosti naše aplikacije:\n\n  • Zahtijeva root i omogućuje sigurnosno kopiranje pojedinačnih aplikacija i njihovih podataka.\n\n  • Podržano je i sigurnosno kopiranje i vraćanje pojedinačnih programa jedan po jedan i skupno spašavanje i vraćanje više programa.\n\n  • Vraćanje aplikacija sustava trebalo bi biti moguće bez potrebe za ponovnim pokretanjem.\n\n  • Sigurnosne kopije mogu se zakazivati bez ograničenja broja pojedinačnih rasporeda, a postoji i mogućnost stvaranja prilagođenih popisa sa liste instaliranih aplikacija."</string>
     <string name="storage_access">Pristup Pohrani</string>
     <string name="other_filters_options">Posebni filteri:</string>
     <string name="usage_notes_title">Napomene o Korištenju</string>

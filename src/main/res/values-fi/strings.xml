@@ -169,7 +169,7 @@
     <string name="enable_encryption_title">Datan salaus</string>
     <string name="enable_encryption_message">Salaamattoman tiedon pitäminen laitteella ei ole turvallista. Ota salaus käyttöön ja aseta salasana.</string>
     <string name="storage_access">Tallennustilan käyttö</string>
-    <string name="welcome_to_oabx">Tervetuloa Neo Backupiin!</string>
+    <string name="welcome_to_oabx">Tervetuloa AnLite Backupiin!</string>
     <string name="delete_all_backups">Poista kaikki varmuuskopiot</string>
     <string name="logs_text_empty">Mitään ei ole näytettävissä!</string>
     <string name="help_issues">Tiedossa olevat ongelmat</string>
@@ -254,7 +254,7 @@
     <string name="spec_appwidgets">Pienoissovellukset</string>
     <string name="prefs_numBackupRevisions_summary">Vanhin varmuuskopio poistetaan uuden varmuuskopion luomisen yhteydessä, mikäli määrä ylittyy. Aseta arvoksi 0 säilyttääksesi kaikki versiot.</string>
     <string name="prefs_batchdelete_summary">Poista niiden sovellusten varmuuskopiot, jotka eivät ole juuri nyt asennettuna.</string>
-    <string name="prefs_copyselfapk_summary">Kopioi Neo Backupin asennustiedosto varmuuskopiointikansion juureen</string>
+    <string name="prefs_copyselfapk_summary">Kopioi AnLite Backupin asennustiedosto varmuuskopiointikansion juureen</string>
     <string name="prefs_saveappslist">Tallenna sovelluslista</string>
     <string name="error_updating_schedule_mode">Ajastuksen %2$d %1$s päivitys epäonnistui</string>
     <string name="dialogYes">Kyllä</string>
@@ -310,7 +310,7 @@
     <string name="prefs_loadingtoasts_summary">Näytä ilmoitukset, kun listaa ladataan</string>
     <string name="prefs_loadingtoasts">Latausilmoitukset</string>
     <string name="prefs_restorepermissions">Palauta käyttöoikeudet</string>
-    <string name="prefs_restorepermissions_summary">Palauta sovellukselle varmuuskopiointiaikana myönnettynä olleet käyttöoikeudet. Huomioi, että joitain käyttöoikeuksia ei voida palauttaa ohjelmallisesti ja se aiheuttaa koko paketin palautuksen epäonnistumisen. Tässä tapauksessa Neo Backup palauttaa paketin ilman käyttöoikeuksia.</string>
+    <string name="prefs_restorepermissions_summary">Palauta sovellukselle varmuuskopiointiaikana myönnettynä olleet käyttöoikeudet. Huomioi, että joitain käyttöoikeuksia ei voida palauttaa ohjelmallisesti ja se aiheuttaa koko paketin palautuksen epäonnistumisen. Tässä tapauksessa AnLite Backup palauttaa paketin ilman käyttöoikeuksia.</string>
     <string name="dialogCancelAll">Peruuta kaikki</string>
     <string name="prefs_sessionIinstaller_summary">Käytä perusasentajan sijaan istuntoasentajaa. Hitaampi, mutta välttää ongelmat Android 13+:n kanssa</string>
     <string name="root_missing">Root-oikeudet puuttuvat!</string>
@@ -318,7 +318,7 @@
     <string name="see_faq">Katso FAQ!</string>
     <string name="prefs_sessionIinstaller">Käytä sessioasentajaa</string>
     <string name="prefs_installerpackagename">Asennuspakkauksen nimi:</string>
-    <string name="intro_welcome_message">Neo Backup (aikaisemmin OAndBackupX) perustuu nimekkääseen OAndBackupiin tavoitteena tuoda OAndBackup vuoteen 202X ja osaksi Neo Applications-kokoelmaa. Sovellus on kokonaan uudelleenohjelmoitu, tavoitteena on tehdä siitä vankka kaikkien laitteiden varmuuskopiointityökalu pitkään suunnitteilla olleilla, käyttöä helpottavilla ominaisuuksilla.
+    <string name="intro_welcome_message">AnLite Backup (aikaisemmin OAndBackupX) perustuu nimekkääseen OAndBackupiin tavoitteena tuoda OAndBackup vuoteen 202X ja osaksi Neo Applications-kokoelmaa. Sovellus on kokonaan uudelleenohjelmoitu, tavoitteena on tehdä siitä vankka kaikkien laitteiden varmuuskopiointityökalu pitkään suunnitteilla olleilla, käyttöä helpottavilla ominaisuuksilla.
 \nYhteistyö ja kontribuutiot on aina tervetullutta.
 \n
 \n Tämänhetkinen toiminnallisuus:

@@ -1,0 +1,83 @@
+/*
+ * AnLite Backup: open-source apps backup and restore app.
+ * Copyright (C) 2020  Antonios Hazim
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+package com.anlite.backup.ui.pages
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.anlite.backup.data.entity.Log
+import com.anlite.backup.ui.compose.blockBorderBottom
+import com.anlite.backup.ui.compose.component.LogRecycler
+import com.anlite.backup.ui.compose.component.RoundButton
+import com.anlite.backup.ui.compose.component.TopBar
+import com.anlite.backup.ui.compose.icons.Phosphor
+import com.anlite.backup.ui.compose.icons.phosphor.GearSix
+import com.anlite.backup.ui.navigation.NavItem
+import com.anlite.backup.utils.extensions.koinAnLiteViewModel
+import com.anlite.backup.viewmodels.LogsVM
+import kotlinx.collections.immutable.toPersistentList
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun LogsPage(viewModel: LogsVM = koinAnLiteViewModel(), navigateUp: () -> Unit) {
+
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            TopBar(
+                title = stringResource(id = NavItem.Logs.title),
+                navigationAction = {
+                    RoundButton(
+                        icon = Phosphor.GearSix,
+                        description = stringResource(id = android.R.string.cancel),
+                        onClick = navigateUp,
+                    )
+                }
+            )
+        }
+    ) { paddingValues ->
+
+        Logs(viewModel, modifier = Modifier.padding(paddingValues))
+    }
+}
+
+@Composable
+fun Logs(viewModel: LogsVM = koinAnLiteViewModel(), modifier: Modifier = Modifier) {
+
+    val logs = remember(viewModel) { viewModel.logsList }
+
+    LaunchedEffect(viewModel) {
+        viewModel.refreshList()
+    }
+
+    LogRecycler(
+        modifier = modifier
+            .blockBorderBottom()
+            .fillMaxSize(),
+        productsList = logs.sortedByDescending(Log::logDate).toPersistentList(),
+        onShare = { viewModel.shareLog(it, pref_shareAsFile.value) },
+        onDelete = { viewModel.deleteLog(it) }
+    )
+}
