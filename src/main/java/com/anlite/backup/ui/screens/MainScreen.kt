@@ -86,6 +86,11 @@ fun MainScreen(
     val showSettingsDialog by viewModel.showSettingsDialog.collectAsState()
     val isRootGranted by viewModel.isRootGranted.collectAsState()
 
+    // 存储库快照页响应式状态
+    val unifiedSnapshots by viewModel.unifiedSnapshots.collectAsState()
+    val snapshotSearchQuery by viewModel.snapshotSearchQuery.collectAsState()
+    val snapshotFilterType by viewModel.snapshotFilterType.collectAsState()
+
     // 目录相关响应式状态
     val directories by directoriesViewModel.directories.collectAsState()
     val selectedDirectoryForSheet by directoriesViewModel.selectedDirectory.collectAsState()
@@ -202,7 +207,11 @@ fun MainScreen(
                     }
                     2 -> {
                         SnapshotsPage(
-                            apps = apps,
+                            snapshots = unifiedSnapshots,
+                            searchQuery = snapshotSearchQuery,
+                            filterType = snapshotFilterType,
+                            onSearchChange = { viewModel.snapshotSearchQuery.value = it },
+                            onFilterChange = { viewModel.snapshotFilterType.value = it },
                             config = engineConfig,
                             stats = repoStats,
                             onSyncRepository = { viewModel.syncRepository() },
@@ -213,7 +222,21 @@ fun MainScreen(
                                     }
                                 }
                             },
-                            onRestoreSnapshot = { pkgName, snapId, onComplete ->
+                            onUnlockRepository = {
+                                viewModel.unlockRepository { success, msg ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(if (success) "仓库锁死已成功清除" else "清除锁死失败: $msg")
+                                    }
+                                }
+                            },
+                            onCheckRepository = {
+                                viewModel.checkRepository { success, msg ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(if (success) "存储库体检通过，数据完整" else "体检发现问题: $msg")
+                                    }
+                                }
+                            },
+                            onRestoreAppSnapshot = { pkgName, snapId, onComplete ->
                                 val appLabel = apps.find { it.packageName == pkgName }?.appLabel ?: pkgName
                                 viewModel.restoreApp(
                                     packageName = pkgName,
@@ -228,8 +251,26 @@ fun MainScreen(
                                     }
                                 }
                             },
-                            onDeleteSnapshot = { snapId, runPrune, onComplete ->
-                                viewModel.deleteSnapshot(snapId, runPrune) { success, err ->
+                            onRestoreDirectorySnapshot = { dirSnap, targetPath, onComplete ->
+                                viewModel.restoreDirectory(
+                                    snapshotId = dirSnap.snapshotId,
+                                    originalPath = dirSnap.path,
+                                    targetPath = targetPath,
+                                ) { success, err ->
+                                    onComplete()
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            if (success) "目录 ${dirSnap.displayTitle} 还原成功" else "目录还原失败: $err"
+                                        )
+                                    }
+                                }
+                            },
+                            onDeleteSnapshot = { snapId, dirId, runPrune, onComplete ->
+                                viewModel.deleteSnapshot(
+                                    snapshotId = snapId,
+                                    directoryId = dirId,
+                                    runPrune = runPrune,
+                                ) { success, err ->
                                     onComplete(success, err)
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
@@ -332,7 +373,7 @@ fun MainScreen(
                     }
                 },
                 onDeleteSnapshot = { snapId, runPrune, onComplete ->
-                    viewModel.deleteSnapshot(snapId, runPrune) { success, err ->
+                    viewModel.deleteSnapshot(snapshotId = snapId, runPrune = runPrune) { success, err ->
                         onComplete(success, err)
                         scope.launch {
                             snackbarHostState.showSnackbar(

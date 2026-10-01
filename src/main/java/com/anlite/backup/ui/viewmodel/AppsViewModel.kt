@@ -10,12 +10,16 @@ import com.anlite.backup.core.queue.SequentialBackupQueue
 import com.anlite.backup.core.usecase.DeleteSnapshotUseCase
 import com.anlite.backup.core.usecase.PruneRepositoryUseCase
 import com.anlite.backup.core.usecase.RestoreAppUseCase
+import com.anlite.backup.core.usecase.RestoreDirectoryUseCase
 import com.anlite.backup.core.usecase.SyncRepositoryUseCase
 import com.anlite.backup.data.preferences.EngineConfig
 import com.anlite.backup.data.preferences.EnginePreferences
 import com.anlite.backup.data.repository.AppItemUiState
 import com.anlite.backup.data.repository.BackupStatus
+import com.anlite.backup.data.repository.DirectoryRepository
 import com.anlite.backup.data.repository.PackageRepository
+import com.anlite.backup.data.repository.SnapshotFilterType
+import com.anlite.backup.data.repository.UnifiedSnapshotUiItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,9 +40,14 @@ enum class FilterMode {
 data class RepoStatsUiState(
     val snapshotCount: Int = 0,
     val totalSizeBytes: Long = 0,
+    val appSnapshotCount: Int = 0,
+    val dirSnapshotCount: Int = 0,
     val isSyncing: Boolean = false,
     val isPruning: Boolean = false,
+    val isChecking: Boolean = false,
+    val isUnlocking: Boolean = false,
     val lastSyncMessage: String? = null,
+    val lastCheckResult: String? = null,
 )
 
 /**
@@ -47,8 +56,10 @@ data class RepoStatsUiState(
  */
 class AppsViewModel(
     private val packageRepository: PackageRepository,
+    private val directoryRepository: DirectoryRepository,
     private val backupQueue: SequentialBackupQueue,
     private val restoreAppUseCase: RestoreAppUseCase,
+    private val restoreDirectoryUseCase: RestoreDirectoryUseCase,
     private val syncRepositoryUseCase: SyncRepositoryUseCase,
     private val pruneRepositoryUseCase: PruneRepositoryUseCase,
     private val deleteSnapshotUseCase: DeleteSnapshotUseCase,
@@ -59,6 +70,10 @@ class AppsViewModel(
     val searchQuery = MutableStateFlow("")
     val filterMode = MutableStateFlow(FilterMode.ALL)
     val selectedPackages = MutableStateFlow<Set<String>>(emptySet())
+
+    // 存储库快照页检索与筛选状态
+    val snapshotSearchQuery = MutableStateFlow("")
+    val snapshotFilterType = MutableStateFlow(SnapshotFilterType.ALL)
 
     val queueProgress: StateFlow<QueueProgress> = backupQueue.progress
     val engineConfig: StateFlow<EngineConfig> = preferences.configFlow.stateIn(
@@ -118,6 +133,83 @@ class AppsViewModel(
         initialValue = emptyList(),
     )
 
+    /**
+     * 响应式统合快照列表（应用快照 + 目录快照混合时间轴）
+     */
+    val unifiedSnapshots: StateFlow<List<UnifiedSnapshotUiItem>> = combine(
+        packageRepository.observeAppItems(),
+        directoryRepository.observeDirectories(),
+        snapshotSearchQuery,
+        snapshotFilterType,
+    ) { apps, directories, query, filter ->
+        val appSnapshots = apps.flatMap { app ->
+            app.snapshots.map { snap ->
+                UnifiedSnapshotUiItem.AppSnapshot(
+                    snapshotId = snap.resticSnapshotId ?: "",
+                    shortId = snap.resticSnapshotId?.take(8) ?: "-",
+                    backupDate = snap.backupDate,
+                    sizeBytes = snap.size,
+                    displayTitle = app.appLabel,
+                    subtitle = app.packageName,
+                    packageName = app.packageName,
+                    versionName = snap.versionName ?: "-",
+                    versionCode = snap.versionCode,
+                    isSystem = app.isSystem,
+                    isInstalled = app.isInstalled,
+                    hasApk = snap.hasApk,
+                    hasAppData = snap.hasAppData,
+                    hasDataDe = snap.hasDevicesProtectedData,
+                    backupEntity = snap,
+                    appUiState = app,
+                )
+            }
+        }
+
+        val dirSnapshots = directories.mapNotNull { dir ->
+            if (dir.lastSnapshotId.isNullOrEmpty() || dir.lastBackupTime == null) {
+                null
+            } else {
+                UnifiedSnapshotUiItem.DirectorySnapshot(
+                    snapshotId = dir.lastSnapshotId,
+                    shortId = dir.lastSnapshotId.take(8),
+                    backupDate = dir.lastBackupTime,
+                    sizeBytes = dir.sizeBytes,
+                    displayTitle = dir.name,
+                    subtitle = dir.path,
+                    path = dir.path,
+                    directoryEntity = dir,
+                )
+            }
+        }
+
+        var list: List<UnifiedSnapshotUiItem> = (appSnapshots + dirSnapshots).sortedByDescending { it.backupDate }
+
+        // 搜索过滤
+        if (query.isNotBlank()) {
+            val q = query.trim().lowercase()
+            list = list.filter { item ->
+                item.displayTitle.lowercase().contains(q) ||
+                item.subtitle.lowercase().contains(q) ||
+                item.snapshotId.lowercase().contains(q) ||
+                item.shortId.lowercase().contains(q)
+            }
+        }
+
+        // 类型分类过滤
+        list = when (filter) {
+            SnapshotFilterType.ALL -> list
+            SnapshotFilterType.APPS_ONLY -> list.filterIsInstance<UnifiedSnapshotUiItem.AppSnapshot>()
+            SnapshotFilterType.DIRECTORIES_ONLY -> list.filterIsInstance<UnifiedSnapshotUiItem.DirectorySnapshot>()
+            SnapshotFilterType.UNINSTALLED_ONLY -> list.filter { it is UnifiedSnapshotUiItem.AppSnapshot && !it.isInstalled }
+        }
+
+        list
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList(),
+    )
+
     init {
         checkRoot()
         loadRepoStats()
@@ -135,10 +227,14 @@ class AppsViewModel(
                 val config = preferences.getSnapshotConfig()
                 val snaps = resticDriver.listSnapshots(config.repoPath, config.repoPassword)
                 val stats = resticDriver.getStats(config.repoPath, config.repoPassword)
+                val appCount = snaps.count { !it.tags.contains("dir") && !it.tags.any { tag -> tag.startsWith("dir:") } }
+                val dirCount = snaps.size - appCount
                 _repoStats.update {
                     it.copy(
                         snapshotCount = snaps.size,
                         totalSizeBytes = stats?.total_size ?: 0L,
+                        appSnapshotCount = appCount,
+                        dirSnapshotCount = dirCount,
                     )
                 }
             } catch (e: Throwable) {
@@ -269,15 +365,61 @@ class AppsViewModel(
         }
     }
 
+    fun unlockRepository(onComplete: ((Boolean, String?) -> Unit)? = null) {
+        viewModelScope.launch {
+            _repoStats.update { it.copy(isUnlocking = true) }
+            val config = preferences.getSnapshotConfig()
+            val result = resticDriver.unlock(config.repoPath, config.repoPassword)
+            _repoStats.update { it.copy(isUnlocking = false) }
+            loadRepoStats()
+            val msg = (result.out + result.err).joinToString("\n").ifBlank { if (result.isSuccess) "已清除死锁" else "解锁失败" }
+            onComplete?.invoke(result.isSuccess, msg)
+        }
+    }
+
+    fun checkRepository(onComplete: ((Boolean, String?) -> Unit)? = null) {
+        viewModelScope.launch {
+            _repoStats.update { it.copy(isChecking = true) }
+            val config = preferences.getSnapshotConfig()
+            val result = resticDriver.check(config.repoPath, config.repoPassword)
+            val msg = (result.out + result.err).joinToString("\n").ifBlank { if (result.isSuccess) "体检通过，数据完整" else "体检发现错误" }
+            _repoStats.update {
+                it.copy(
+                    isChecking = false,
+                    lastCheckResult = msg,
+                )
+            }
+            loadRepoStats()
+            onComplete?.invoke(result.isSuccess, msg)
+        }
+    }
+
+    fun restoreDirectory(
+        snapshotId: String,
+        originalPath: String,
+        targetPath: String,
+        onComplete: ((Boolean, String?) -> Unit)? = null,
+    ) {
+        viewModelScope.launch {
+            val result = restoreDirectoryUseCase.execute(
+                snapshotId = snapshotId,
+                originalPath = originalPath,
+                targetPath = targetPath,
+            )
+            onComplete?.invoke(result.isSuccess, result.exceptionOrNull()?.message)
+        }
+    }
+
     fun deleteSnapshot(
         snapshotId: String,
+        directoryId: Long? = null,
         runPrune: Boolean = false,
         onComplete: ((Boolean, String?) -> Unit)? = null,
     ) {
         viewModelScope.launch {
             val res = deleteSnapshotUseCase.execute(
                 snapshotId = snapshotId,
-                directoryId = null,
+                directoryId = directoryId,
                 runPrune = runPrune,
             )
             loadRepoStats()

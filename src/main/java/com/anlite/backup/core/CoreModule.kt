@@ -30,6 +30,6 @@ val coreModule = module {
     single { DeleteSnapshotUseCase(get(), get(), get(), get(), get()) }
     single { SequentialBackupQueue(get(), get(), get(), get(), get()) }
     single { PackageRepository(androidContext(), get(), get(), getOrNull()) }
-    single { AppsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { AppsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { DirectoriesViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

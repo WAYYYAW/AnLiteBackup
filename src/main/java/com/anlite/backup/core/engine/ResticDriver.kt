@@ -391,4 +391,25 @@ class ResticDriver(private val context: Context) {
             null
         }
     }
+
+    /**
+     * 清理仓库中由于异常中断遗留的死锁 (Stale Locks)
+     */
+    suspend fun unlock(
+        repoPath: String,
+        password: String,
+    ): ShellResult = withContext(Dispatchers.IO) {
+        executeRestic(repoPath, password, listOf("unlock", "--remove-all"))
+    }
+
+    /**
+     * 校验仓库结构、索引与快照数据完整性 (restic check)
+     */
+    suspend fun check(
+        repoPath: String,
+        password: String,
+        onLine: ((String) -> Unit)? = null,
+    ): ShellResult = withContext(Dispatchers.IO) {
+        executeRestic(repoPath, password, listOf("check", "--read-data-subset=1/20"), onLine = onLine)
+    }
 }
