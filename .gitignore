@@ -1,0 +1,14 @@
+*.iml
+*.pyc
+*.swp
+*.hprof
+.gradle
+.idea
+.kotlin
+build/
+local.properties
+src/main/jniLibs/
+release/
+neo/
+debug/
+*.salive
