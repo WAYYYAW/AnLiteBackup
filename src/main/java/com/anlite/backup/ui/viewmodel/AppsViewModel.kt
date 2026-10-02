@@ -341,6 +341,14 @@ class AppsViewModel(
         clearSelection()
     }
 
+    fun cancelPendingTasks() {
+        backupQueue.clearPendingTasks()
+    }
+
+    fun resetQueueState() {
+        backupQueue.resetState()
+    }
+
     fun syncRepository() {
         viewModelScope.launch {
             _repoStats.update { it.copy(isSyncing = true) }

@@ -1,5 +1,9 @@
 package com.anlite.backup.ui.screens
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -16,11 +20,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -45,9 +51,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.anlite.backup.utils.checkNotificationPermission
 import com.anlite.backup.core.queue.QueueActionType
 import com.anlite.backup.core.queue.QueueProgress
 import com.anlite.backup.ui.components.AppDetailSheet
@@ -102,6 +110,32 @@ fun MainScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    var pendingAction by remember { mutableStateOf<(() -> Unit)?>(null) }
+    var showNotificationRationaleDialog by remember { mutableStateOf(false) }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            pendingAction?.invoke()
+        } else {
+            scope.launch {
+                snackbarHostState.showSnackbar("未授予通知权限，操作已拦截")
+            }
+        }
+        pendingAction = null
+    }
+
+    fun runWithNotificationPermission(action: () -> Unit) {
+        if (checkNotificationPermission(context)) {
+            action()
+        } else {
+            pendingAction = action
+            showNotificationRationaleDialog = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -167,7 +201,13 @@ fun MainScreen(
                 // 实时调度队列进度横幅（当正在执行备份时展示）
                 QueueProgressBanner(
                     progress = queueProgress,
-                    onDismiss = { /* 可清除状态 */ },
+                    onCancelPending = {
+                        viewModel.cancelPendingTasks()
+                        scope.launch {
+                            snackbarHostState.showSnackbar("已请求取消后续任务，等待当前任务完成...")
+                        }
+                    },
+                    onDismiss = { viewModel.resetQueueState() },
                 )
 
                 // Tab 内容切换
@@ -197,8 +237,8 @@ fun MainScreen(
                                 }
                             },
                             onDirectoryClick = { directoriesViewModel.selectDirectory(it) },
-                            onBackupSingle = { directoriesViewModel.backupDirectory(it) },
-                            onBackupAll = { directoriesViewModel.backupAllDirectories() },
+                            onBackupSingle = { runWithNotificationPermission { directoriesViewModel.backupDirectory(it) } },
+                            onBackupAll = { runWithNotificationPermission { directoriesViewModel.backupAllDirectories() } },
                             onAddClick = {
                                 directoriesViewModel.clearValidation()
                                 showAddDirectoryDialog = true
@@ -237,31 +277,35 @@ fun MainScreen(
                                 }
                             },
                             onRestoreAppSnapshot = { pkgName, snapId, onComplete ->
-                                val appLabel = apps.find { it.packageName == pkgName }?.appLabel ?: pkgName
-                                viewModel.restoreApp(
-                                    packageName = pkgName,
-                                    snapshotId = snapId,
-                                    packageLabel = appLabel,
-                                ) { success, err ->
-                                    onComplete()
-                                    if (!success && err != null) {
-                                        scope.launch {
-                                            snackbarHostState.showSnackbar("还原失败: $err")
+                                runWithNotificationPermission {
+                                    val appLabel = apps.find { it.packageName == pkgName }?.appLabel ?: pkgName
+                                    viewModel.restoreApp(
+                                        packageName = pkgName,
+                                        snapshotId = snapId,
+                                        packageLabel = appLabel,
+                                    ) { success, err ->
+                                        onComplete()
+                                        if (!success && err != null) {
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar("还原失败: $err")
+                                            }
                                         }
                                     }
                                 }
                             },
                             onRestoreDirectorySnapshot = { dirSnap, targetPath, onComplete ->
-                                viewModel.restoreDirectory(
-                                    snapshotId = dirSnap.snapshotId,
-                                    originalPath = dirSnap.path,
-                                    targetPath = targetPath,
-                                ) { success, err ->
-                                    onComplete()
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            if (success) "目录 ${dirSnap.displayTitle} 还原成功" else "目录还原失败: $err"
-                                        )
+                                runWithNotificationPermission {
+                                    viewModel.restoreDirectory(
+                                        snapshotId = dirSnap.snapshotId,
+                                        originalPath = dirSnap.path,
+                                        targetPath = targetPath,
+                                    ) { success, err ->
+                                        onComplete()
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(
+                                                if (success) "目录 ${dirSnap.displayTitle} 还原成功" else "目录还原失败: $err"
+                                            )
+                                        }
                                     }
                                 }
                             },
@@ -339,7 +383,7 @@ fun MainScreen(
                             }
 
                             Button(
-                                onClick = { viewModel.backupSelectedApps() },
+                                onClick = { runWithNotificationPermission { viewModel.backupSelectedApps() } },
                                 shape = RoundedCornerShape(8.dp),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                             ) {
@@ -358,16 +402,18 @@ fun MainScreen(
             AppDetailSheet(
                 app = app,
                 onDismiss = { viewModel.closeAppDetail() },
-                onBackupNow = { viewModel.backupSingleApp(it) },
+                onBackupNow = { runWithNotificationPermission { viewModel.backupSingleApp(it) } },
                 onRestoreSnapshot = { pkgName, snapId ->
-                    viewModel.restoreApp(
-                        packageName = pkgName,
-                        snapshotId = snapId,
-                        packageLabel = app.appLabel,
-                    ) { success, err ->
-                        if (!success && err != null) {
-                            scope.launch {
-                                snackbarHostState.showSnackbar("还原失败: $err")
+                    runWithNotificationPermission {
+                        viewModel.restoreApp(
+                            packageName = pkgName,
+                            snapshotId = snapId,
+                            packageLabel = app.appLabel,
+                        ) { success, err ->
+                            if (!success && err != null) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("还原失败: $err")
+                                }
                             }
                         }
                     }
@@ -395,10 +441,12 @@ fun MainScreen(
                 onDismiss = { showBatchRestoreDialog = false },
                 onConfirm = { restoreApk, restoreData ->
                     showBatchRestoreDialog = false
-                    viewModel.restoreSelectedApps(
-                        restoreApk = restoreApk,
-                        restoreData = restoreData,
-                    )
+                    runWithNotificationPermission {
+                        viewModel.restoreSelectedApps(
+                            restoreApk = restoreApk,
+                            restoreData = restoreData,
+                        )
+                    }
                 },
             )
         }
@@ -410,13 +458,15 @@ fun MainScreen(
                 snapshots = dirState.snapshots,
                 isLoadingSnapshots = dirState.isLoadingSnapshots,
                 onDismiss = { directoriesViewModel.dismissDetail() },
-                onBackupNow = { directoriesViewModel.backupDirectory(it) },
+                onBackupNow = { runWithNotificationPermission { directoriesViewModel.backupDirectory(it) } },
                 onDeleteDirectory = { directoriesViewModel.deleteDirectory(it) },
                 onRestoreSnapshot = { snapId, origPath, targetPath, onComplete ->
-                    directoriesViewModel.restoreDirectory(snapId, origPath, targetPath) { success, err ->
-                        onComplete(success, err)
-                        scope.launch {
-                            snackbarHostState.showSnackbar(if (success) "目录还原成功" else "还原失败: $err")
+                    runWithNotificationPermission {
+                        directoriesViewModel.restoreDirectory(snapId, origPath, targetPath) { success, err ->
+                            onComplete(success, err)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(if (success) "目录还原成功" else "还原失败: $err")
+                            }
                         }
                     }
                 },
@@ -475,12 +525,56 @@ fun MainScreen(
                 },
             )
         }
+
+        // 通知权限说明与申请弹窗 (Android 13+)
+        if (showNotificationRationaleDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showNotificationRationaleDialog = false
+                    pendingAction = null
+                },
+                title = { Text("需要通知权限") },
+                text = {
+                    Text(
+                        "AnLiteBackup 在执行备份或还原任务时，需要通过常驻前台服务与系统通知保持运行，" +
+                            "防止息屏或切换后台时任务被系统冻结或杀死。\n\n" +
+                            "请授予通知权限以确保任务能稳定完成并实时显示进度。"
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            showNotificationRationaleDialog = false
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            } else {
+                                pendingAction?.invoke()
+                                pendingAction = null
+                            }
+                        }
+                    ) {
+                        Text("去授权")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            showNotificationRationaleDialog = false
+                            pendingAction = null
+                        }
+                    ) {
+                        Text("取消")
+                    }
+                }
+            )
+        }
     }
 }
 
 @Composable
 fun QueueProgressBanner(
     progress: QueueProgress,
+    onCancelPending: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     AnimatedVisibility(
@@ -516,21 +610,47 @@ fun QueueProgressBanner(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val label = progress.currentTask?.displayLabel ?: "准备中..."
-                    Text(
-                        text = "$actionTitle [${progress.currentIndex}/${progress.totalCount}]: $label",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = onContainerColor,
-                    )
-                    Text(
-                        text = "${(progress.percent * 100).toInt()}%",
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold,
-                        color = onContainerColor,
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "$actionTitle [${progress.currentIndex}/${progress.totalCount}]: $label",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = onContainerColor,
+                            maxLines = 1,
+                        )
+                        if (progress.message.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = progress.message,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontSize = 11.sp,
+                                color = onContainerColor.copy(alpha = 0.85f),
+                                maxLines = 1,
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "${(progress.percent * 100).toInt()}%",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = onContainerColor,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        OutlinedButton(
+                            onClick = onCancelPending,
+                            shape = RoundedCornerShape(8.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                        ) {
+                            Text("取消后续", fontSize = 12.sp)
+                        }
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 LinearProgressIndicator(
                     progress = { progress.percent },
@@ -538,17 +658,6 @@ fun QueueProgressBanner(
                         .fillMaxWidth()
                         .height(6.dp),
                 )
-
-                if (progress.message.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = progress.message,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontSize = 11.sp,
-                        color = onContainerColor.copy(alpha = 0.8f),
-                        maxLines = 1,
-                    )
-                }
             }
         }
     }
