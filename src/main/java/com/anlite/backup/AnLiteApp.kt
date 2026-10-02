@@ -20,21 +20,15 @@ package com.anlite.backup
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Looper
-import android.os.PowerManager
 import android.os.Process
 import android.os.StrictMode
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.work.WorkManager
-import com.charleskorn.kaml.Yaml
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 import com.anlite.backup.data.dbs.databaseModule
@@ -46,26 +40,10 @@ import com.anlite.backup.data.preferences.pref_catchUncaughtException
 import com.anlite.backup.data.preferences.pref_logToSystemLogcat
 import com.anlite.backup.data.preferences.pref_maxLogLines
 import com.anlite.backup.data.preferences.pref_uncaughtExceptionsJumpToPreferences
-import com.anlite.backup.data.preferences.traceBusy
 import com.anlite.backup.data.preferences.traceDebug
 import com.anlite.backup.data.preferences.traceSection
-import com.anlite.backup.data.preferences.traceSerialize
 import com.anlite.backup.data.repository.PackageRepository
-import com.anlite.backup.manager.handler.AssetHandler
-import com.anlite.backup.manager.handler.ExportsHandler
-import com.anlite.backup.manager.handler.LogsHandler
-import com.anlite.backup.manager.handler.PGPHandler
-import com.anlite.backup.manager.handler.ShellHandler
-import com.anlite.backup.manager.handler.WorkHandler
-import com.anlite.backup.manager.services.PackageUnInstalledReceiver
 import com.anlite.backup.ui.activities.AnLiteActivity
-import com.anlite.backup.ui.activities.viewModelsModule
-import com.anlite.backup.ui.pages.pref_busyHitTime
-import com.anlite.backup.ui.pages.pref_cancelOnStart
-import com.anlite.backup.ui.pages.pref_prettyJson
-import com.anlite.backup.ui.pages.pref_useYamlPreferences
-import com.anlite.backup.ui.pages.pref_useYamlProperties
-import com.anlite.backup.ui.pages.pref_useYamlSchedules
 import com.anlite.backup.utils.FileUtils.BackupLocationInAccessibleException
 import com.anlite.backup.utils.ISO_DATE_TIME_FORMAT_MS
 import com.anlite.backup.utils.StorageLocationNotConfiguredException
@@ -73,46 +51,36 @@ import com.anlite.backup.utils.SystemUtils
 import com.anlite.backup.utils.TraceUtils.beginNanoTimer
 import com.anlite.backup.utils.TraceUtils.classAndId
 import com.anlite.backup.utils.TraceUtils.endNanoTimer
-import com.anlite.backup.utils.TraceUtils.methodName
 import com.anlite.backup.utils.backupDirConfigured
 import com.anlite.backup.utils.extensions.Android
 import com.anlite.backup.utils.isDynamicTheme
 import com.anlite.backup.utils.restartApp
-import com.anlite.backup.utils.scheduleAlarmsOnce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androix.startup.KoinStartup
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.koinConfiguration
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.system.exitProcess
 
 val RESCUE_NAV get() = "rescue"
 
 class AnLiteApp : Application(), KoinStartup {
 
-    val work: WorkHandler by inject()
     val applicationScope = CoroutineScope(
         SupervisorJob() + Dispatchers.Default
     )
@@ -123,21 +91,13 @@ class AnLiteApp : Application(), KoinStartup {
         androidContext(this@AnLiteApp)
         modules(
             com.anlite.backup.core.coreModule,
-            handlersModule,
             databaseModule,
             prefsModule,
-            viewModelsModule,
         )
     }
 
     override fun onCreate() {
         if (Android.minSDK(Build.VERSION_CODES.S)) {
-            /*StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build()
-            )*/
             StrictMode.setVmPolicy(
                 StrictMode.VmPolicy.Builder()
                     .detectUnsafeIntentLaunch()
@@ -155,13 +115,7 @@ class AnLiteApp : Application(), KoinStartup {
         if (pref_catchUncaughtException.value) {
             Thread.setDefaultUncaughtExceptionHandler { _, e ->
                 try {
-                    try {
-                        //Timber.i("\n\n" + "=".repeat(60))
-                        LogsHandler.unexpectedException(e)
-                        //LogsHandler.logErrors("uncaught: ${e.message}")
-                    } catch (_: Throwable) {
-                        // ignore
-                    }
+                    Timber.e(e, "Uncaught exception")
                     if (pref_uncaughtExceptionsJumpToPreferences.value) {
                         context.restartApp(RESCUE_NAV)
                     }
@@ -195,30 +149,12 @@ class AnLiteApp : Application(), KoinStartup {
 
         Plugin.ensureScanned()
 
-        val result = registerReceiver(
-            PackageUnInstalledReceiver(),
-            IntentFilter().apply {
-                addAction(Intent.ACTION_PACKAGE_ADDED)
-                addAction(Intent.ACTION_PACKAGE_REMOVED)
-                addAction(Intent.ACTION_PACKAGE_REPLACED)
-                addDataScheme("package")
-            }
-        )
-        Timber.d("registerReceiver: PackageUnInstalledReceiver = $result")
-
-        if (pref_cancelOnStart.value)
-            work.cancel()
-        work.prune()
-
         MainScope().launch {
-            addInfoLogText("--> click title to keep infobox open")
-            addInfoLogText("--> long press title for dev tools")
-            com.anlite.backup.utils.BackupShareUtils.cleanupShareCache(this@AnLiteApp)
+            addInfoLogText("--> AnLite Backup initialized")
         }
     }
 
     override fun onTerminate() {
-        work.release()
         refNB = WeakReference(null)
         super.onTerminate()
         applicationScope.cancel()
@@ -226,87 +162,25 @@ class AnLiteApp : Application(), KoinStartup {
 
     companion object {
 
-        @ExperimentalSerializationApi
-        val serMod = SerializersModule {
-            //contextual(Boolean.serializer())
-            //contextual(Int.serializer())
-            //contextual(String.serializer())
-            //polymorphic(Any::class) {
-            //    subclass(Boolean.serializer())
-            //    subclass(Int.serializer())
-            //    subclass(String.serializer())
-            //}
-            //polymorphic(Any::class) {
-            //    subclass(Boolean::class)
-            //    subclass(Int::class)
-            //    subclass(String::class)
-            //}
-            //polymorphic(Any::class) {
-            //    subclass(Boolean::class, Boolean.serializer())
-            //    subclass(Int::class, Int.serializer())
-            //    subclass(String::class, String.serializer())
-            //}
-            //polymorphic(Any::class, Boolean::class, Boolean.serializer())
-            //polymorphic(Any::class, Int::class, Int.serializer())
-            //polymorphic(Any::class, String::class, String.serializer())
-        }
-
-        // create alternatives here and switch when used to allow dynamic prefs
-        @OptIn(ExperimentalSerializationApi::class)
         val JsonDefault = Json {
-            serializersModule = serMod
+            ignoreUnknownKeys = true
+            encodeDefaults = true
         }
 
-        @OptIn(ExperimentalSerializationApi::class)
         val JsonPretty = Json {
-            serializersModule = serMod
+            ignoreUnknownKeys = true
             prettyPrint = true
+            encodeDefaults = true
         }
 
-        @OptIn(ExperimentalSerializationApi::class)
-        val YamlDefault = Yaml(serMod)
+        val propsSerializer: StringFormat get() = JsonPretty
+        val schedSerializer: StringFormat get() = JsonPretty
 
-        private val propsSerializerDef: Pair<String, StringFormat>
-            get() =
-                when {
-                    pref_useYamlProperties.value -> "yaml" to YamlDefault
-                    pref_prettyJson.value        -> "json" to JsonPretty
-                    else                         -> "json" to JsonDefault
-                }
-        val propsSerializer: StringFormat get() = propsSerializerDef.second
-        private val propsSerializerSuffix: String get() = propsSerializerDef.first
-
-        private val prefsSerializerDef: Pair<String, StringFormat>
-            get() =
-                when {
-                    pref_useYamlPreferences.value -> "yaml" to YamlDefault
-                    else                          -> "json" to JsonPretty
-                }
-        private val prefsSerializer: StringFormat get() = prefsSerializerDef.second
-        private val prefsSerializerSuffix: String get() = prefsSerializerDef.first
-
-        private val schedSerializerDef: Pair<String, StringFormat>
-            get() =
-                when {
-                    pref_useYamlSchedules.value -> "yaml" to YamlDefault
-                    else                        -> "json" to JsonPretty
-                }
-        val schedSerializer: StringFormat get() = schedSerializerDef.second
-        private val schedSerializerSuffix: String get() = schedSerializerDef.first
-
-        inline fun <reified T> toSerialized(serializer: StringFormat, value: T) =
+        inline fun <reified T> toSerialized(serializer: StringFormat, value: T): String =
             serializer.encodeToString(value)
 
-        inline fun <reified T> fromSerialized(serialized: String): T {
-            traceSerialize { "serialized: <-- $serialized" }
-            val props: T = try {
-                JsonDefault.decodeFromString(serialized)
-            } catch (_: Throwable) {
-                YamlDefault.decodeFromString(serialized)
-            }
-            traceSerialize { "    object: --> $props" }
-            return props
-        }
+        inline fun <reified T> fromSerialized(serialized: String): T =
+            JsonDefault.decodeFromString(serialized)
 
         val lastLogMessages = ConcurrentLinkedQueue<String>()
         fun addLogMessage(message: String) {
@@ -348,12 +222,10 @@ class AnLiteApp : Application(), KoinStartup {
         }
 
         private var logSections = mutableMapOf<String, Int>()
-            .withDefault { 0 }     //TODO hg42 use AtomicInteger? but map is synchronized anyways
+            .withDefault { 0 }
 
         init {
-
             Timber.plant(object : Timber.DebugTree() {
-
                 override fun log(
                     priority: Int, tag: String?, message: String, t: Throwable?,
                 ) {
@@ -369,7 +241,7 @@ class AnLiteApp : Application(), KoinStartup {
                         when (priority) {
                             Log.VERBOSE -> "V"
                             Log.ASSERT  -> "A"
-                            Log.DEBUG   -> "D"
+                            Log.DEBUG   -> "DEBUG"
                             Log.ERROR   -> "E"
                             Log.INFO    -> "I"
                             Log.WARN    -> "W"
@@ -379,20 +251,8 @@ class AnLiteApp : Application(), KoinStartup {
                     val date = ISO_DATE_TIME_FORMAT_MS.format(now)
                     try {
                         addLogMessage("$date $prio $tag : $message")
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         // ignore
-                        runCatching {
-                            lastLogMessages.clear()
-                            addLogMessage("$date E LOG : while adding or limiting log lines")
-                            addLogMessage(
-                                "$date E LOG : ${
-                                    LogsHandler.message(
-                                        e,
-                                        backTrace = true
-                                    )
-                                }"
-                            )
-                        }
                     }
                 }
 
@@ -412,41 +272,24 @@ class AnLiteApp : Application(), KoinStartup {
         }
 
         var startup = true
-        const val startupMsg = "******************** startup" // ensure it's the same for begin/end
+        const val startupMsg = "******************** startup"
 
-        // app should always be created
         var refNB: WeakReference<AnLiteApp> = WeakReference(null)
         val NB: AnLiteApp get() = refNB.get()!!
 
         val context: Context get() = NB.applicationContext
 
-        private var assetsRef: WeakReference<AssetHandler> = WeakReference(null)
-        val assets: AssetHandler
-            get() {
-                if (assetsRef.get() == null)
-                    assetsRef = WeakReference(AssetHandler(context))
-                return assetsRef.get()!!
-            }
-
-        // activity might be null
         private var activityRefs = mutableListOf<WeakReference<Activity>>()
         private var activityRef: WeakReference<Activity> = WeakReference(null)
         val activity: Activity?
-            get() {
-                return activityRef.get()
-            }
+            get() = activityRef.get()
 
         fun addActivity(activity: Activity) {
             activityRef = WeakReference(activity)
             synchronized(activityRefs) {
                 traceDebug { "activities.add: ${classAndId(activity)}" }
-                // remove activities of the same class
-                //activityRef.get()?.localClassName.let { localClassName ->
-                //    activityRefs.removeIf { it.get()?.localClassName == localClassName }
-                //}
                 activityRefs.add(activityRef)
                 activityRefs.removeIf { it.get() == null }
-                traceDebug { "activities(add): ${activityRefs.map { classAndId(it.get()) }}" }
             }
         }
 
@@ -457,20 +300,15 @@ class AnLiteApp : Application(), KoinStartup {
                 activityRefs.removeIf { it.get() == activity }
                 activityRefs.add(activityRef)
                 activityRefs.removeIf { it.get() == null }
-                traceDebug { "activities(res): ${activityRefs.map { classAndId(it.get()) }}" }
             }
-
-            scheduleAlarmsOnce(context)        // if any activity is started
         }
 
         fun removeActivity(activity: Activity) {
             synchronized(activityRefs) {
                 traceDebug { "activities.remove: ${classAndId(activity)}" }
-                //activityRefs.removeIf { it.get()?.localClassName == activity.localClassName }
                 activityRefs.removeIf { it.get() == activity }
                 activityRef = WeakReference(null)
                 activityRefs.removeIf { it.get() == null }
-                traceDebug { "activities(remove): ${activityRefs.map { classAndId(it.get()) }}" }
             }
         }
 
@@ -481,32 +319,15 @@ class AnLiteApp : Application(), KoinStartup {
                 }
             }
 
-        // main might be null
         var mainRef: WeakReference<AnLiteActivity> = WeakReference(null)
         var main: AnLiteActivity?
-            get() {
-                return mainRef.get()
-            }
+            get() = mainRef.get()
             set(mainActivity) {
                 mainRef = WeakReference(mainActivity)
             }
-        var mainSaved: WeakReference<AnLiteActivity> =
-            WeakReference(null)    // just to see if activity changed
+        var mainSaved: WeakReference<AnLiteActivity> = WeakReference(null)
 
         var appsSuspendedChecked = false
-
-        var shellHandler: ShellHandler? = null
-            get() {
-                if (field == null) {
-                    field = try { ShellHandler() } catch (e: Throwable) { null }
-                }
-                return field
-            }
-            private set
-
-        fun initShellHandler(): ShellHandler? {
-            return shellHandler
-        }
 
         val isRelease get() = SystemUtils.packageName.endsWith(".backup")
         val isDebug get() = SystemUtils.packageName.contains("debug")
@@ -524,7 +345,7 @@ class AnLiteApp : Application(), KoinStartup {
                         throw StorageLocationNotConfiguredException()
                     }
                     val storageDir = StorageFile.fromUri(storagePath)
-                    if (!storageDir.exists()) { //TODO hg42 for now only existing directories allowed
+                    if (!storageDir.exists()) {
                         Timber.e("backup storage location not accessible: $storagePath")
                         throw BackupLocationInAccessibleException("Cannot access the root location '$storagePath'")
                     }
@@ -537,7 +358,6 @@ class AnLiteApp : Application(), KoinStartup {
         //------------------------------------------------------------------------------------------ infoText
 
         var infoLogLines = mutableStateListOf<String>()
-
         const val nInfoLogLines = 100
         var showInfoLog by mutableStateOf(false)
 
@@ -565,35 +385,6 @@ class AnLiteApp : Application(), KoinStartup {
             }
         }
 
-        //------------------------------------------------------------------------------------------ wakelock
-
-        // if any background work is to be done
-        private var theWakeLock: PowerManager.WakeLock? = null
-        private var wakeLockNested = AtomicInteger(0)
-        private const val WAKELOCK_TAG = "AnLiteBackup:Application"
-
-        // count the nesting levels
-        // might be difficult sometimes, because
-        // the lock must be transferred from one object/function to another
-        // e.g. from the receiver to the service
-        fun wakelock(aquire: Boolean) {
-            if (aquire) {
-                traceDebug { "%%%%% $WAKELOCK_TAG wakelock aquire (before: $wakeLockNested)" }
-                if (wakeLockNested.accumulateAndGet(+1, Int::plus) == 1) {
-                    val pm: PowerManager = get(PowerManager::class.java)
-                    theWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
-                    theWakeLock?.acquire(60 * 60 * 1000L)
-                    traceDebug { "%%%%% $WAKELOCK_TAG wakelock ACQUIRED" }
-                }
-            } else {
-                traceDebug { "%%%%% $WAKELOCK_TAG wakelock release (before: $wakeLockNested)" }
-                if (wakeLockNested.accumulateAndGet(-1, Int::plus) == 0) {
-                    traceDebug { "%%%%% $WAKELOCK_TAG wakelock RELEASING" }
-                    theWakeLock?.release()
-                }
-            }
-        }
-
         //------------------------------------------------------------------------------------------ progress
 
         val progress = mutableStateOf(Pair(false, 0f))
@@ -612,13 +403,12 @@ class AnLiteApp : Application(), KoinStartup {
             synchronized(logSections) {
                 count = logSections.getValue(section)
                 logSections[section] = count + 1
-                //if (count == 0 && xxx)  logMessages.clear()           //TODO hg42
             }
             traceSection { """*** ${"|---".repeat(count)}\ $section""" }
             beginNanoTimer("section.$section")
         }
 
-        fun endLogSection(section: String) {    //TODO hg42 timer!
+        fun endLogSection(section: String) {
             val time = endNanoTimer("section.$section")
             var count: Int
             synchronized(logSections) {
@@ -626,77 +416,9 @@ class AnLiteApp : Application(), KoinStartup {
                 logSections[section] = count - 1
             }
             traceSection { "*** ${"|---".repeat(count - 1)}/ $section ${"%.3f".format(time / 1E9)} sec" }
-            //if (count == 0 && xxx)  ->Log                             //TODO hg42
         }
 
-        //------------------------------------------------------------------------------------------ busy
-
-        var busyCountDownAtomic = AtomicInteger(0)
-        var busyLevelAtomic = AtomicInteger(0)
-        val busyTick = 250
-        var busy = mutableStateOf(false)
-        var busyLevel = mutableIntStateOf(0)
-        var busyCountDown = mutableIntStateOf(0)
-
-        init {
-            CoroutineScope(Dispatchers.IO).launch {
-                while (true) {
-                    delay(busyTick.toLong())
-                    busyCountDownAtomic.getAndUpdate {
-                        if (it > 0) {
-                            val next = it - 1
-                            busyCountDown.intValue = next
-                            busyLevel.intValue = busyLevelAtomic.get()
-                            if (next == 0)
-                                busy.value = false
-                            else if (!busy.value)
-                                busy.value = true
-                            next
-                        } else
-                            it
-                    }
-                }
-            }
-
-            //TODO hg42 beginBusy(startupMsg)
-            hitBusy(120000) // startup
-        }
-
-        fun hitBusy(time: Int = pref_busyHitTime.value) {
-            busyCountDownAtomic.set(
-                time / busyTick
-            )
-        }
-
-        fun beginBusy(name: String? = null) {
-            traceBusy {
-                val label = name ?: methodName(1)
-                """*** \ busy $label"""
-            }
-            busyLevelAtomic.incrementAndGet()
-            hitBusy(60000)
-            beginNanoTimer("busy.$name")
-        }
-
-        fun endBusy(name: String? = null): Long {
-            val time = endNanoTimer("busy.$name")
-            busyLevelAtomic.decrementAndGet()
-            if (busyLevelAtomic.get() == 0) {
-                busyCountDownAtomic.set(1)
-            }
-            traceBusy {
-                val label = name ?: methodName(1)
-                "*** / busy $label ${"%.3f".format(time / 1E9)} sec"
-            }
-            return time
-        }
-
-        //------------------------------------------------------------------------------------------ runningSchedules
-
-        // TODO remove after checking (unique workers shouldn't have duplicates anyway)
         val runningSchedules = mutableMapOf<Long, Boolean>()
-
-        //------------------------------------------------------------------------------------------ backups
 
         fun putBackups(packageName: String, backups: Set<Backup>) {
             runBlocking(Dispatchers.IO) {
@@ -713,12 +435,4 @@ class AnLiteApp : Application(), KoinStartup {
             }
         }
     }
-}
-
-val handlersModule = module {
-    single { WorkManager.getInstance(get()) }
-    single { WorkHandler(get(), get()) }
-    single { ExportsHandler(get()) }
-    single { get<Context>().getSystemService(Context.POWER_SERVICE) as PowerManager }
-    singleOf(::PGPHandler)
 }

@@ -13,13 +13,11 @@ import com.anlite.backup.MIME_TYPE_DIR
 import com.anlite.backup.MIME_TYPE_FILE
 import com.anlite.backup.AnLiteApp
 import com.anlite.backup.PROP_NAME
+import com.anlite.backup.data.preferences.pref_cacheFileLists
+import com.anlite.backup.data.preferences.pref_cacheUris
+import com.anlite.backup.data.preferences.pref_shadowRootFile
 import com.anlite.backup.data.preferences.traceDebug
-import com.anlite.backup.manager.handler.LogsHandler.Companion.logException
-import com.anlite.backup.manager.handler.LogsHandler.Companion.unexpectedException
-import com.anlite.backup.manager.handler.ShellCommands
-import com.anlite.backup.ui.pages.pref_cacheFileLists
-import com.anlite.backup.ui.pages.pref_cacheUris
-import com.anlite.backup.ui.pages.pref_shadowRootFile
+import com.anlite.backup.utils.SystemUtils.currentProfile
 import com.anlite.backup.utils.SystemUtils.getShadowPath
 import com.anlite.backup.utils.SystemUtils.isWritablePath
 import timber.log.Timber
@@ -29,6 +27,14 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.URLDecoder
+
+private fun logException(e: Throwable, message: String? = null, backTrace: Boolean = false) {
+    Timber.e(e, message ?: "StorageFile error")
+}
+
+private fun unexpectedException(e: Throwable, message: Any? = null) {
+    Timber.e(e, message?.toString() ?: "Unexpected exception in StorageFile")
+}
 
 
 fun getCursorString(cursor: Cursor, columnName: String): String? {
@@ -343,7 +349,7 @@ open class StorageFile {
                             if (user_provider.size > 1)
                                 user_provider[0]
                             else
-                                ShellCommands.currentProfile.toString()
+                                currentProfile.toString()
                         if (storage == "primary")
                             storage = "emulated/$user"
                         file = getShadowPath(

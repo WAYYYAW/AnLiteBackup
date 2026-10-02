@@ -1,7 +1,6 @@
 package com.anlite.backup.utils.extensions
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.anlite.backup.data.entity.Package
 import com.anlite.backup.data.preferences.traceDebug
 
 object IconCache {
@@ -15,7 +14,6 @@ object IconCache {
     }
 
     fun putIcon(key: Any, painter: Painter) {
-        //traceDebug { "icon put $key" }
         synchronized(painterCache) {
             painterCache.put(key, painter)
         }
@@ -32,18 +30,6 @@ object IconCache {
         synchronized(painterCache) {
             painterCache.clear()
         }
-    }
-
-    fun dropAllButUsed(pkgs: List<Package>) {
-        val used = pkgs.map { it.iconData }.toSet()
-        //beginNanoTimer("limitIconCache")
-        val keys = synchronized(painterCache) { painterCache.keys.toSet() }
-        (keys - used).forEach {
-            if (it !is Int) {
-                removeIcon(it)
-            }
-        }
-        //endNanoTimer("limitIconCache")
     }
 
     val size: Int

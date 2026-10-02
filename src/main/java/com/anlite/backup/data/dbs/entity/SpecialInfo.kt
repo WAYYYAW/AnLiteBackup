@@ -8,7 +8,6 @@ import com.anlite.backup.FIELD_IS_SYSTEM
 import com.anlite.backup.FIELD_PACKAGE_NAME
 import com.anlite.backup.R
 import com.anlite.backup.data.plugins.SpecialFilesPlugin
-import com.anlite.backup.manager.handler.ShellCommands
 import com.anlite.backup.utils.FileUtils.BackupLocationInAccessibleException
 import com.anlite.backup.utils.StorageLocationNotConfiguredException
 import timber.log.Timber
@@ -106,39 +105,7 @@ open class SpecialInfo : PackageInfo {
                 // because there is some time between asking for the size and the first add
                 locked = true
                 if (specialInfos.size == 0) {
-                    // caching this prevents recreating AppInfo-objects all the time and at wrong times
-                    val specPrefix = "$ "
-
-                    if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-                        specialInfos
-                            .add(
-                                SpecialInfo(
-                                    "special.smsmms.json",
-                                    specPrefix + context.getString(R.string.spec_smsmmsjson),
-                                    "",
-                                    0,
-                                    arrayOf(
-                                        "${context.cacheDir.absolutePath}/special.smsmms.json.json"
-                                    ),
-                                    R.drawable.ic_sms
-                                )
-                            )
-                        specialInfos
-                            .add(
-                                SpecialInfo(
-                                    "special.calllogs.json",
-                                    specPrefix + context.getString(R.string.spec_calllogsjson),
-                                    "",
-                                    0,
-                                    arrayOf(
-                                        "${context.cacheDir.absolutePath}/special.calllogs.json.json"
-                                    ),
-                                    R.drawable.ic_call_logs
-                                )
-                            )
-                    }
-
-                    specialInfos += SpecialFilesPlugin.specialInfos(ShellCommands.currentProfile.toString())
+                    specialInfos += SpecialFilesPlugin.specialInfos("0")
                 }
                 locked = false
             }

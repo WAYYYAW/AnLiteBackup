@@ -21,7 +21,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.anlite.backup.data.dbs.entity.Backup
-import com.anlite.backup.manager.handler.LogsHandler.Companion.logException
+import timber.log.Timber
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -67,7 +67,7 @@ interface BackupDao : BaseDao<Backup> {
                 insert(*backups.toTypedArray())
             //replaceInsert(*backups)
         } catch (e: Throwable) {
-            logException(e, backTrace = true)
+            Timber.e(e, "Error updating backup list")
         }
     }
 

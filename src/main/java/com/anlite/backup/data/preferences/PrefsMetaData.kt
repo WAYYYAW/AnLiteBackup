@@ -1,7 +1,6 @@
 package com.anlite.backup.data.preferences
 
 import android.content.Context
-import com.anlite.backup.ui.pages.pref_deviceLock
 import com.anlite.backup.utils.isBiometricLockAvailable
 import com.anlite.backup.utils.isDeviceLockAvailable
 

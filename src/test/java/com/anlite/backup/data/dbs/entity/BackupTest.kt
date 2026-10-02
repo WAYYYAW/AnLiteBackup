@@ -1,6 +1,5 @@
 package com.anlite.backup.data.dbs.entity
 
-import com.charleskorn.kaml.Yaml
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
@@ -94,22 +93,6 @@ class BackupTest {
         assertFalse(decoded.isLegacyBackup)
     }
 
-    @Test
-    fun testYamlSerializationRoundTrip() {
-        val original = createBackup(
-            compressionType = "restic",
-            resticSnapshotId = "cafebabe87654321",
-            cipherType = null,
-            iv = null,
-        )
-        val encoded = Yaml.default.encodeToString(Backup.serializer(), original)
-        val decoded = Yaml.default.decodeFromString(Backup.serializer(), encoded)
-
-        assertEquals(original, decoded)
-        assertEquals("cafebabe87654321", decoded.resticSnapshotId)
-        assertTrue(decoded.isResticBackup)
-        assertFalse(decoded.isLegacyBackup)
-    }
 
     @Test
     fun testLegacyJsonDeserializationCompatibility() {

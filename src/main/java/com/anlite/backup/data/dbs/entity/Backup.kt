@@ -33,10 +33,9 @@ import com.anlite.backup.MODE_DATA_MEDIA
 import com.anlite.backup.MODE_DATA_OBB
 import com.anlite.backup.AnLiteApp
 import com.anlite.backup.PROP_NAME
+import com.anlite.backup.BACKUP_PACKAGE_FOLDER_REGEX_PATTERN
 import com.anlite.backup.data.entity.StorageFile
-import com.anlite.backup.manager.handler.LogsHandler.Companion.logException
-import com.anlite.backup.manager.handler.regexPackageFolder
-import com.anlite.backup.ui.pages.pref_createInvalidBackups
+import timber.log.Timber
 import com.anlite.backup.utils.LocalDateTimeSerializer
 import com.anlite.backup.utils.SystemUtils
 import kotlinx.serialization.Serializable
@@ -303,6 +302,8 @@ data class Backup @OptIn(kotlinx.serialization.ExperimentalSerializationApi::cla
 
         fun fromSerialized(serialized: String) = AnLiteApp.fromSerialized<Backup>(serialized)
 
+        private val regexPackageFolder = Regex(BACKUP_PACKAGE_FOLDER_REGEX_PATTERN)
+
         fun createFrom(propertiesFile: StorageFile): Backup? {
             var serialized = ""
             try {
@@ -310,10 +311,7 @@ data class Backup @OptIn(kotlinx.serialization.ExperimentalSerializationApi::cla
                 serialized = propertiesFile.readText()
 
                 val backup = if (serialized.isEmpty()) {
-                    if (pref_createInvalidBackups.value)
-                        createInvalidFrom(propertiesFile, why = "empty-props")
-                    else
-                        null
+                    null
                 } else {
                     fromSerialized(serialized)
                 }
@@ -326,11 +324,11 @@ data class Backup @OptIn(kotlinx.serialization.ExperimentalSerializationApi::cla
                     file = propertiesFile
                 }
             } catch (e: FileNotFoundException) {
-                logException(e, "Cannot open ${propertiesFile.path}", backTrace = false)
+                Timber.e(e, "Cannot open ${propertiesFile.path}")
             } catch (e: IOException) {
-                logException(e, "Cannot read ${propertiesFile.path}", backTrace = false)
+                Timber.e(e, "Cannot read ${propertiesFile.path}")
             } catch (e: Throwable) {
-                logException(e, "file: ${propertiesFile.path} =\n$serialized", backTrace = false)
+                Timber.e(e, "file: ${propertiesFile.path} =\n$serialized")
             }
             return null
         }
@@ -389,7 +387,7 @@ data class Backup @OptIn(kotlinx.serialization.ExperimentalSerializationApi::cla
                 return backup
 
             } catch (e: Throwable) {
-                logException(
+                Timber.e(
                     e,
                     "creating invalid backup item also failed, for directory ${
                         directory.path
@@ -398,8 +396,7 @@ data class Backup @OptIn(kotlinx.serialization.ExperimentalSerializationApi::cla
                             " and file ${propertiesFile.path}"
                         else
                             ""
-                    }",
-                    backTrace = false
+                    }"
                 )
             }
             return null

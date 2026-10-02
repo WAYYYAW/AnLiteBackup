@@ -31,7 +31,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import com.anlite.backup.ui.pages.pref_altBlockLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -71,7 +70,7 @@ inline fun Modifier.ifThenElse(
     }
 }
 
-fun Modifier.blockBorderBottom(altStyle: Boolean = !pref_altBlockLayout.value) =
+fun Modifier.blockBorderBottom(altStyle: Boolean = true) =
     composed {
         this
             .padding(2.dp)
@@ -91,7 +90,7 @@ fun Modifier.blockBorderBottom(altStyle: Boolean = !pref_altBlockLayout.value) =
             )
     }
 
-fun Modifier.blockBorderTop(altStyle: Boolean = !pref_altBlockLayout.value) =
+fun Modifier.blockBorderTop(altStyle: Boolean = true) =
     composed {
         this
             .padding(2.dp)
@@ -111,7 +110,7 @@ fun Modifier.blockBorderTop(altStyle: Boolean = !pref_altBlockLayout.value) =
             )
     }
 
-fun Modifier.blockShadow(altStyle: Boolean = !pref_altBlockLayout.value) =
+fun Modifier.blockShadow(altStyle: Boolean = true) =
     composed {
         this
             .clip(MaterialTheme.shapes.extraLarge)

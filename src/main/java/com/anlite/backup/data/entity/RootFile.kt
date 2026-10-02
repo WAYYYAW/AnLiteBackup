@@ -1,8 +1,7 @@
 package com.anlite.backup.data.entity
 
-import com.anlite.backup.manager.handler.ShellHandler
-import com.anlite.backup.manager.handler.ShellHandler.Companion.runAsRoot
-import com.anlite.backup.manager.handler.ShellHandler.Companion.utilBoxQ
+import com.anlite.backup.core.engine.RootExecutor
+import com.anlite.backup.core.engine.ShellResult
 import com.topjohnwu.superuser.ShellUtils
 import com.topjohnwu.superuser.io.SuFile
 import com.topjohnwu.superuser.io.SuFileInputStream
@@ -17,6 +16,40 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+private const val utilBoxQ = ""
+private fun runAsRoot(command: String): ShellResult = RootExecutor.execute(command)
+
+private fun quote(parameter: String): String {
+    val charactersToBeEscaped = Regex("""[\\${'$'}"`]""")
+    return "\"${parameter.replace(charactersToBeEscaped) { "\\${it.value}" }}\""
+}
+
+private fun unescapeLsOutput(str: String): String {
+    val isEscaped = Regex("""\\([\\abefnrtv ]|\d\d\d)""")
+    return str.replace(isEscaped) { match: MatchResult ->
+        val matched = match.groups[1]?.value ?: "?"
+        when (matched) {
+            """\""" -> """\"""
+            "a"     -> "\u0007"
+            "b"     -> "\u0008"
+            "e"     -> "\u001b"
+            "f"     -> "\u000c"
+            "n"     -> "\n"
+            "r"     -> "\r"
+            "t"     -> "\t"
+            "v"     -> "\u000b"
+            " "     -> " "
+            else    -> {
+                try {
+                    matched.toInt(8).toChar().toString()
+                } catch (_: Throwable) {
+                    matched
+                }
+            }
+        }
+    }
+}
 
 /*
 * based on:
@@ -211,7 +244,7 @@ class RootFile internal constructor(file: File) : SuFile(file.absolutePath) {
      * @see File.renameTo
      */
     override fun renameTo(dest: File): Boolean {
-        return cmdBool("$utilBoxQ mv -f $escapedPath ${ShellHandler.quote(dest.absolutePath)}")
+        return cmdBool("$utilBoxQ mv -f $escapedPath ${quote(dest.absolutePath)}")
     }
 
     private fun setPerms(set: Boolean, ownerOnly: Boolean, b: Int): Boolean {
@@ -328,9 +361,9 @@ class RootFile internal constructor(file: File) : SuFile(file.absolutePath) {
     override fun list(filenameFilter: FilenameFilter?): Array<String>? {
         //if (!isDirectory) return null
         val files = runAsRoot("$utilBoxQ ls -bA1 $escapedPath/").out.map {
-            ShellHandler.FileInfo.unescapeLsOutput(it)
+            unescapeLsOutput(it)
         }.filter {
-            filenameFilter?.accept(this, name) ?: true
+            filenameFilter?.accept(this, it) ?: true
         }
         return files.toTypedArray()
     }
@@ -392,27 +425,25 @@ class RootFile internal constructor(file: File) : SuFile(file.absolutePath) {
 
     companion object {
         fun open(pathname: String): File {
-            return if (ShellHandler.isLikeRoot ?: false) RootFile(pathname) else File(pathname)
+            return if (RootExecutor.isRootAvailable()) RootFile(pathname) else File(pathname)
         }
 
         fun open(parent: String?, child: String): File {
-            return if (ShellHandler.isLikeRoot ?: false) RootFile(parent, child) else File(
+            return if (RootExecutor.isRootAvailable()) RootFile(parent, child) else File(
                 parent,
                 child
             )
         }
 
         fun open(parent: File?, child: String): File {
-            return if (ShellHandler.isLikeRoot ?: false) RootFile(parent, child) else File(
+            return if (RootExecutor.isRootAvailable()) RootFile(parent, child) else File(
                 parent,
                 child
             )
         }
 
         fun open(uri: URI): File {
-            return if (ShellHandler.isLikeRoot
-                    ?: false
-            ) RootFile(uri) else File(uri)   //TODO hg42 ???
+            return if (RootExecutor.isRootAvailable()) RootFile(uri) else File(uri)
         }
     }
 }

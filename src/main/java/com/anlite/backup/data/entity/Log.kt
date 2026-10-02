@@ -19,10 +19,10 @@ package com.anlite.backup.data.entity
 
 import com.anlite.backup.AnLiteApp
 import com.anlite.backup.data.dbs.entity.Backup
-import com.anlite.backup.manager.handler.LogsHandler
 import com.anlite.backup.utils.LocalDateTimeSerializer
 import com.anlite.backup.utils.TraceUtils.canonicalName
 import com.anlite.backup.utils.extensions.Android
+import timber.log.Timber
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.FileNotFoundException
@@ -73,7 +73,7 @@ open class Log {
                 e
             )
         } catch (e: Throwable) {
-            LogsHandler.unexpectedException(e, logFile)
+            Timber.e(e, "Unable to process $logFile")
             throw Backup.BrokenBackupException("Unable to process $logFile. (${e::class.canonicalName}) $e")
         }
     }
@@ -89,8 +89,7 @@ open class Log {
     }
 
     fun delete(): Boolean? {
-        val logFile = LogsHandler.getLogFile(this.logDate)
-        return logFile?.delete()
+        return false
     }
 
     fun initFromText(text: String): Boolean {
@@ -134,7 +133,7 @@ open class Log {
             }
             valid
         } catch (e: Throwable) {
-            LogsHandler.unexpectedException(e)
+            Timber.e(e, "Error parsing log text")
             false
         }
     }

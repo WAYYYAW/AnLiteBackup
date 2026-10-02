@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.anlite.backup.THEME
-import com.anlite.backup.ui.pages.pref_appTheme
+import com.anlite.backup.data.preferences.pref_appTheme
 import com.anlite.backup.utils.extensions.Android
 import com.anlite.backup.utils.getThemeContrast
 import com.anlite.backup.utils.isBlackTheme

@@ -12,13 +12,6 @@ import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import com.anlite.backup.ui.compose.component.BooleanPreference
-import com.anlite.backup.ui.compose.component.EnumPreference
-import com.anlite.backup.ui.compose.component.IntPreference
-import com.anlite.backup.ui.compose.component.ListPreference
-import com.anlite.backup.ui.compose.component.StringEditPreference
-import com.anlite.backup.ui.compose.component.StringPreference
-import com.anlite.backup.ui.compose.component.StringSetPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -47,9 +40,7 @@ class PrefBoolean(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        BooleanPreference(pref = pref as PrefBoolean, index = index, groupSize = groupSize)
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChange = onChanged,
@@ -76,9 +67,7 @@ class PrefInt(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        IntPreference(pref = pref as PrefInt, index = index, groupSize = groupSize)
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChange = onChanged,
@@ -104,14 +93,7 @@ open class PrefString(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        StringPreference(
-            pref = pref as PrefString,
-            index = index,
-            groupSize = groupSize,
-            onClick = { onDialogUI(pref) },
-        )
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChange = onChanged,
@@ -138,9 +120,7 @@ class PrefEditString(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, _, index, groupSize ->
-        StringEditPreference(pref = pref as PrefEditString, index = index, groupSize = groupSize)
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChanged = onChanged,
@@ -168,14 +148,7 @@ class PrefList(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        ListPreference(
-            pref = pref as PrefList,
-            index = index,
-            groupSize = groupSize,
-            onClick = { onDialogUI(pref) },
-        )
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChanged = onChanged,
@@ -201,9 +174,7 @@ class PrefStringSet(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        StringSetPreference(pref = pref as PrefStringSet, index = index, groupSize = groupSize)
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChange = onChanged,
@@ -230,14 +201,7 @@ class PrefEnum(
     titleId = titleId,
     summaryId = summaryId,
     summary = summary,
-    UI = UI ?: { pref, onDialogUI, index, groupSize ->
-        EnumPreference(
-            pref = pref as PrefEnum,
-            index = index,
-            groupSize = groupSize,
-            onClick = { onDialogUI(pref) },
-        )
-    },
+    UI = UI,
     icon = icon,
     iconTint = iconTint,
     onChange = onChanged,
@@ -306,8 +270,4 @@ abstract class PrefDelegate<T : Any>(
     suspend fun clear() {
         dataStore.edit { prefs -> prefs.remove(dataStoreKey) }
     }
-
-    //init {
-    //    Pref.prefGroups.getOrPut(group) { mutableListOf() }.add(NeoPrefAdapter(this))
-    //}
 }

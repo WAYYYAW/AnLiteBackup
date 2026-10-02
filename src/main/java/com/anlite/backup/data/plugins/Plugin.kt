@@ -2,7 +2,6 @@ package com.anlite.backup.data.plugins
 
 import androidx.compose.runtime.Composable
 import com.anlite.backup.AnLiteApp
-import com.anlite.backup.manager.handler.LogsHandler.Companion.logException
 import com.anlite.backup.data.preferences.tracePlugin
 import timber.log.Timber
 import java.io.File
@@ -48,7 +47,7 @@ abstract class Plugin(val name: String, var file: File) {
         }
     }
 
-    val isBuiltin get() = file.path.startsWith(builtinDir.path)
+    val isBuiltin get() = builtinDir?.path?.let { file.path.startsWith(it) } ?: false
 
     fun ensureEditable() {
         if (isBuiltin) {
@@ -129,9 +128,7 @@ abstract class Plugin(val name: String, var file: File) {
 
         inline fun <reified T> getAll() = getAll { it.value is T }.map { it.value as T }
 
-        // files need to be copied from ap[k to filesDir, so use assets.directory instead of filesDir
-        //        val builtinDir get() = OABX.context.filesDir?.resolve("plugin")
-        val builtinDir get() = AnLiteApp.assets.directory.resolve("plugin")
+        val builtinDir get() = AnLiteApp.context.filesDir?.resolve("plugin")
         val userDir get() = AnLiteApp.context.getExternalFilesDir(null)?.resolve("plugin")
 
         fun loadPluginFromDir(dir: File): Plugin? {
@@ -147,7 +144,7 @@ abstract class Plugin(val name: String, var file: File) {
                     createFrom(file)
                 }
             } catch (e: Throwable) {
-                logException(e)
+                Timber.e(e, "Error loading plugin")
                 null
             }
         }

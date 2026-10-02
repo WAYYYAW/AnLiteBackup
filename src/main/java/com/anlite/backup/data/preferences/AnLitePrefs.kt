@@ -26,11 +26,11 @@ import com.anlite.backup.THEME
 import com.anlite.backup.UpdatedFilter
 import com.anlite.backup.accentColorItems
 import com.anlite.backup.batchModesSequence
+import com.anlite.backup.data.entity.BooleanPref
 import com.anlite.backup.data.entity.SortFilterModel
 import com.anlite.backup.possibleMainFilters
 import com.anlite.backup.secondaryColorItems
 import com.anlite.backup.themeItems
-import com.anlite.backup.ui.compose.component.StringEditPreference
 import com.anlite.backup.ui.compose.icons.Phosphor
 import com.anlite.backup.ui.compose.icons.phosphor.ArrowsOutLineVertical
 import com.anlite.backup.ui.compose.icons.phosphor.CalendarX
@@ -45,7 +45,6 @@ import com.anlite.backup.ui.compose.icons.phosphor.Swatches
 import com.anlite.backup.ui.compose.icons.phosphor.TagSimple
 import com.anlite.backup.ui.compose.icons.phosphor.TextAa
 import com.anlite.backup.ui.compose.icons.phosphor.Translate
-import com.anlite.backup.ui.pages.pref_restartAppOnLanguageChange
 import com.anlite.backup.utils.StorageLocationNotConfiguredException
 import com.anlite.backup.utils.SystemUtils
 import com.anlite.backup.utils.backupDirConfigured
@@ -280,11 +279,8 @@ class AnLitePrefs private constructor(val context: Context) : KoinComponent {
         icon = Phosphor.Translate,
         entries = context.getLanguageList(),
         defaultValue = com.anlite.backup.PREFS_LANGUAGES_SYSTEM,
-        onChanged = { pref ->
-            if (pref_restartAppOnLanguageChange.value)
-                context.restartApp()
-            else
-                recreateActivities()
+        onChanged = { _ ->
+            recreateActivities()
         },
         dataStore = dataStore,
         dataStoreKey = UserPrefKey.LANGUAGES,
@@ -351,37 +347,6 @@ class AnLitePrefs private constructor(val context: Context) : KoinComponent {
             if (p.value.isNotEmpty()) {
                 setBackupDir(Uri.parse(p.value))
             }
-        },
-        UI = { pref, onDialogUI, index, groupSize ->
-            val context = LocalContext.current
-            val launcher =
-                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.data != null && result.resultCode == Activity.RESULT_OK) {
-                        result.data?.let {
-                            val uri = it.data ?: return@let
-                            val oldDir = try {
-                                backupDirConfigured
-                            } catch (e: StorageLocationNotConfiguredException) {
-                                ""
-                            }
-                            if (oldDir != uri.toString()) {
-                                val flags =
-                                    it.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                                context.contentResolver.takePersistableUriPermission(uri, flags)
-                                Timber.i("setting uri $uri")
-                                setBackupDir(uri)
-                            }
-                        }
-                    }
-                }
-            StringEditPreference(
-                pref = pref as PrefEditString,
-                index = index,
-                groupSize = groupSize,
-                onClick = {
-                    launcher.launch(BACKUP_DIRECTORY_INTENT)
-                }
-            )
         },
     )
 
@@ -566,6 +531,8 @@ class AnLitePrefs private constructor(val context: Context) : KoinComponent {
     }
 
     companion object {
+        val neoPrefs: AnLitePrefs get() = org.koin.java.KoinJavaComponent.get(AnLitePrefs::class.java)
+
         val prefsModule = module {
             singleOf(::AnLitePrefs)
             singleOf(::provideDataStore)
@@ -580,3 +547,26 @@ class AnLitePrefs private constructor(val context: Context) : KoinComponent {
         }
     }
 }
+
+val pref_appTheme: PrefEnum get() = AnLitePrefs.neoPrefs.appTheme
+val pref_appAccentColor: PrefEnum get() = AnLitePrefs.neoPrefs.appAccentColor
+val pref_appSecondaryColor: PrefEnum get() = AnLitePrefs.neoPrefs.appSecondaryColor
+val pref_languages: PrefList get() = AnLitePrefs.neoPrefs.languages
+val pref_pathBackupFolder: PrefEditString get() = AnLitePrefs.neoPrefs.pathBackupFolder
+val pref_deviceLock: PrefBoolean get() = AnLitePrefs.neoPrefs.deviceLock
+val pref_biometricLock: PrefBoolean get() = AnLitePrefs.neoPrefs.biometricLock
+
+val pref_shadowRootFile = BooleanPref(
+    key = "dev-file.shadowRootFile",
+    defaultValue = false,
+)
+
+val pref_cacheUris = BooleanPref(
+    key = "dev-file.cacheUris",
+    defaultValue = true,
+)
+
+val pref_cacheFileLists = BooleanPref(
+    key = "dev-file.cacheFileLists",
+    defaultValue = true,
+)

@@ -38,14 +38,14 @@ import com.anlite.backup.AnLiteApp
 import com.anlite.backup.UpdatedFilter
 import com.anlite.backup.data.entity.SpecialFilter
 import com.anlite.backup.data.entity.StorageFile
-import com.anlite.backup.manager.handler.LogsHandler
-import com.anlite.backup.manager.handler.WorkHandler
+import timber.log.Timber
 import com.anlite.backup.utils.SystemUtils
 import com.anlite.backup.utils.TraceUtils.canonicalName
-import com.anlite.backup.utils.randomScheduleName
 import kotlinx.serialization.Serializable
 import java.io.FileNotFoundException
 import java.io.IOException
+
+private fun randomScheduleName(): String = "Schedule-" + System.currentTimeMillis()
 
 @Entity(
     indices = [
@@ -160,7 +160,7 @@ data class Schedule(
         )
 
     fun getBatchName(startTime: Long): String =
-        WorkHandler.getBatchName(this.name, startTime)
+        "${this.name} - $startTime"
 
     class Builder() {
         var schedule: Schedule = Schedule()
@@ -186,7 +186,7 @@ data class Schedule(
                     e
                 )
             } catch (e: Throwable) {
-                LogsHandler.unexpectedException(e, exportFile.path)
+                Timber.e(e, "Unexpected error reading schedule: ${exportFile.path}")
                 throw Backup.BrokenBackupException("Unable to process ${exportFile.name} at ${exportFile.path}. (${e::class.canonicalName}) $e")
             }
         }

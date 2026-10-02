@@ -162,9 +162,6 @@ class PackageRepository(
         backupDao.getAll()
     }
 
-    fun getPackagesFlow(): Flow<List<com.anlite.backup.data.entity.Package>> =
-        kotlinx.coroutines.flow.flowOf(emptyList())
-
     fun getBackupsMap(): Map<String, Set<Backup>> = runBlocking(Dispatchers.IO) {
         backupDao.getAll().groupBy { it.packageName }.mapValues { it.value.toSet() }
     }

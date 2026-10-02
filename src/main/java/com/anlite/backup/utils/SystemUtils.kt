@@ -10,8 +10,6 @@ import android.os.SystemClock
 import com.anlite.backup.AnLiteApp
 import com.anlite.backup.data.entity.RootFile
 import com.anlite.backup.data.entity.StorageFile
-import com.anlite.backup.manager.handler.LogsHandler
-import com.anlite.backup.manager.handler.ShellCommands
 import com.anlite.backup.utils.extensions.Android
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +29,9 @@ import java.security.cert.X509Certificate
 
 
 object SystemUtils {
+
+    val currentProfile: Int
+        get() = android.os.Process.myUid() / 100000
 
     private fun Context.getApplicationInfos(what: Int = 0): PackageInfo? =
         packageManager.getPackageInfo(packageName, what)
@@ -132,19 +133,12 @@ object SystemUtils {
                 val shareIntent = Intent.createChooser(sendIntent, subject ?: "AnLiteBackup")
                 AnLiteApp.activity?.startActivity(shareIntent)
             } catch (e: Throwable) {
-                LogsHandler.unexpectedException(e)
+                Timber.e(e, "Error sharing text")
             }
         }
     }
 
     fun share(file: StorageFile, asFile: Boolean = true) {
-        //if (asFile && file.file == null) {
-        //    OABX.context.getExternalFilesDir(DIRECTORY_DOWNLOADS)
-        //        ?.resolve(file.name ?: "AnLiteBackup-share.txt")
-        //        ?.also { it.writeText(file.readText()) }
-        //        ?.let { share(StorageFile(it)) }
-        //    return
-        //}
         MainScope().launch(Dispatchers.IO) {
             try {
                 val text = if (asFile) "" else file.readText()
@@ -163,7 +157,7 @@ object SystemUtils {
                 val shareIntent = Intent.createChooser(sendIntent, file.name)
                 AnLiteApp.activity?.startActivity(shareIntent)
             } catch (e: Throwable) {
-                LogsHandler.unexpectedException(e)
+                Timber.e(e, "Error sharing file")
             }
         }
     }
@@ -216,7 +210,7 @@ object SystemUtils {
 
     fun getAndroidFolder(
         subPath: String,
-        user: String = ShellCommands.currentProfile.toString(),
+        user: String = currentProfile.toString(),
         isUseablePath: (file: RootFile?) -> Boolean = ::isWritablePath
     ): RootFile? {
         // only check access to Android folder and add subFolder even if it does not exist
