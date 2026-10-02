@@ -17,22 +17,22 @@
  */
 pluginManagement {
     repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
         maven(url = "https://maven.aliyun.com/repository/public")
         maven(url = "https://maven.aliyun.com/repository/google")
         maven(url = "https://maven.aliyun.com/repository/gradle-plugin")
-        mavenCentral()
-        google()
-        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        google()
+        mavenCentral()
+        maven(url = "https://jitpack.io")
         maven(url = "https://maven.aliyun.com/repository/public")
         maven(url = "https://maven.aliyun.com/repository/google")
-        mavenCentral()
-        google()
-        maven(url = "https://jitpack.io")
     }
 }
 rootProject.name = "AnLiteBackup"
