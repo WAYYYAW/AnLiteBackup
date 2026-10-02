@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -50,17 +51,56 @@ android {
         applicationId = "com.anlite.backup"
         minSdk = 26
         targetSdk = 36
-        versionCode = 8331
-        versionName = "8.3.18"
-        buildConfigField("int", "MAJOR", "8")
-        buildConfigField("int", "MINOR", "3")
+        versionCode = 1
+        versionName = "1.0"
+        buildConfigField("int", "MAJOR", "1")
+        buildConfigField("int", "MINOR", "0")
 
         testApplicationId = "$applicationId.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            file.inputStream().use { load(it) }
+        }
+    }
+
+    val keystorePath = System.getenv("KEYSTORE_FILE")
+        ?: localProperties.getProperty("signing.keystore.path")
+    val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+        ?: localProperties.getProperty("signing.keystore.password")
+    val keyAlias = System.getenv("KEY_ALIAS")
+        ?: localProperties.getProperty("signing.key.alias")
+    val keyPassword = System.getenv("KEY_PASSWORD")
+        ?: localProperties.getProperty("signing.key.password")
+
+    signingConfigs {
+        if (!keystorePath.isNullOrBlank() &&
+            !keystorePassword.isNullOrBlank() &&
+            !keyAlias.isNullOrBlank() &&
+            !keyPassword.isNullOrBlank() &&
+            file(keystorePath).exists()
+        ) {
+            create("release") {
+                storeFile = file(keystorePath)
+                storePassword = keystorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
+            }
+        }
+    }
+
     buildTypes {
         named("release") {
+            signingConfigs.findByName("release")?.let {
+                signingConfig = it
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
